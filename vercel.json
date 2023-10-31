@@ -1,9 +1,6 @@
 {
     "functions": {
-      "app/*.ts": {
-        "maxDuration": 30
-      },
-      "app/*.js": {
+      "app/**/*": {
         "maxDuration": 30
       }
     }
