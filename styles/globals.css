@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (min-width: 400px) {
+@media (min-width: 500px) {
+   
   .background-gradient::before {
-    background: radial-gradient(
-      20% 50% at 50% 50%,
-      rgba(71, 127, 247, 0.376) 0%,
-      rgba(37, 38, 44, 0) 100%
-    );
+   
+   
+    background: radial-gradient(circle at center, green 0, green, green 100%);
     z-index: -10;
     content: "";
     position: absolute;
