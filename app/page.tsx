@@ -28,7 +28,7 @@ export default function HomePage() {
         </h1>
         <h2 className="mx-auto mt-12 max-w-xl text-lg sm:text-gray-400  text-gray-500 leading-7">
           Take a picture of your room and see how your room looks in different
-          themes. 100% free – remodel your room today.
+          themes. remodel your room today.
         </h2>
         <Link
           className="bg-blue-600 rounded-xl text-white font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-blue-500 transition"
@@ -43,7 +43,7 @@ export default function HomePage() {
                 <h3 className="mb-1 font-medium text-lg">Original Room</h3>
                 <Image
                   alt="Original photo of a room with Decorion"
-                  src="/original-pic1.jpg"
+                  src="/original-pic.jpg"
                   className="w-full object-cover h-96 rounded-2xl"
                   width={400}
                   height={400}
@@ -55,7 +55,7 @@ export default function HomePage() {
                   alt="Generated photo of a room with Decorion"
                   width={400}
                   height={400}
-                  src="/generated-pic-22.jpg"
+                  src="/generated-pic-2.jpg"
                   className="w-full object-cover h-96 rounded-2xl sm:mt-0 mt-2"
                 />
               </div>
