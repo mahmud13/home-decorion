@@ -51,7 +51,12 @@ export async function POST(request: Request) {
 
   // POST request to Replicate to start the image restoration generation process
   const client = new vision.ImageAnnotatorClient({
-    keyFilename: "./rock-extension-404217-900289375b05.json",
+    credentials: {
+      project_id: "rock-extension-404217",
+      client_email: 'homedecor@rock-extension-404217.iam.gserviceaccount.com',
+      private_key:
+        "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCyJoietIUOhWAf\nvBiLPjSUKGjzxD7s8H66UwA0fPithlLVKZIH95/lZesPoAv2dehwt45im1eoWPke\n7Zt6fmupXDKkSNa2Oz1+kQy+HxQFdSfKG7KLHfj4iHpeDnP+T/GDDIfQ+TmHyk6r\n5vRzptkK9lgM1cimlIedmLly5LtmoWaDOIaDIYfkAZ2ddg3T4lQtQXk+A8QzOAK7\n+YlLneVn/78gLnY9tnPJCQYpiEFXCYxejbkmiBU1tVtVp9RjRCRZ3dtLGSySyTfl\nVAgAZ2iCdPNkWXLZi/ps7H04HTkhtycqD5O5CdJ9aFXHg3hVZSZUj2HJL3xDWZ+m\n6FN3fvVVAgMBAAECggEACDbc+M25DuIufE1yJ5rO1iqw1YCYfYNZ9zcUMiy1qLFM\ns3XPEnKkBZyimd4BfzPmQQBDCUqWtZ/4nf5LENBbICbXUkTmMDvgtNZ1AHUyuU0I\nGyUWIUeuBFkCpMCaL5aPERcBp4HpBFkF3J5HFOgTZ5J+nS+O/hio0ib0chbtidNW\nn8/KPT+bGsxwc2oOxm9y2bPIo6ulfIEydq50O1zYZXBMBHGxl5oVIC91u3EVjPE7\n9YQETXwGBFVvvNDO4Z0VZHUr+5E/oWjXZTi2/oTWMAoPwCkORZsSfAMSjt18ZroB\nVZClTeiC5Kbn6Bzf4l5N+ZPVCz95QmPqYVBmzlbO5wKBgQDiQWblA6pONsScOtAm\nFiw+fdkxzAuzYcfA45RoPwkXOIbWLCAOZnXkEJbshgJl/0tVWegTgGiX1jts3SQo\nlpiS0eFZOiuJdkZokzV6hPizKbWaWr4w3/QIAuqqzUtfpMHkMBdiMUsofJ27ekuT\nlqPo46vcN7vtT+8e2fYPNn/9hwKBgQDJkip3WRol6uTvcBMwHjaE9kaTQaf+u37U\nyGBdMxB77fvmZDQSwphAkoN5XOmyOYDU85CGjsi9WKHelEFV1SxPKo1r0mM/6KNx\nPMokcRjjDDoiY/ksCKTbzTvgD9vAwtQ+w0z2tDj70187vfPaIoyhSilKNAHeLCzy\nlYDrZNJNQwKBgQCgr3I0E3ZQNfVMPzi00+p4N0iZZSCqNTd4dihgIOSD6VFZqdza\nXUo8vstxD3uElNsbss5vizK9IxjxJ90WNl4FZ6lzhSyGY8l9W48PhIBcPbML/IY2\nj9bwGaIvy71MH+bT+JOi2P9XsakUDLbACqw+KfNUYwDEeZCJiKKIC1y64QKBgQCO\nM3mV/Nv/h/i+GhjPR2E65+reE+GKSYeuYTXqSg4E/91HqcU6vuFeHH537d5IB10l\n3jZFVxGy0oZPWdPF07+Qkfp26FNwUJSNXE9W6hqego+4l0K/l9GF5wGojkd/c3L8\nXBc9q+LPdUyn/te7OchwOLtsR8hRjmSfNm1eox/htQKBgQCzE3aDTpdG9bHuOB6w\n52Y+Z/ybzIdeKK2HOaqavQ6s6GG/pRKIovkNfqLaCqDIwdzQeKcb2EG/BlMkcuGc\n8E1CttuxU4nzT7a5UiwvOMf7PDr1F+hJ2u23V5fndBu+I/+Be8TgLb7zzCiVt6Sj\nKyqRFf19792Qq83u4qqVk1cXwQ==\n-----END PRIVATE KEY-----\n",
+    },
   });
   if (client.objectLocalization) {
     const [result] = await client.objectLocalization(imageUrl);
