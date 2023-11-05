@@ -16,3 +16,14 @@
     pointer-events: none;
   }
 }
+
+.image-container {
+    position: relative;
+}
+
+.annotation-rect {
+    position: absolute;
+}    
+.annotation-rect:hover {
+    border: 2px solid red;
+} 
