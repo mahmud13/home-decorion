@@ -3,6 +3,7 @@ import redis from "../../utils/redis";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Replicate from "replicate";
+import vision from "@google-cloud/vision";
 
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
@@ -12,7 +13,15 @@ const ratelimit = redis
       analytics: true,
     })
   : undefined;
-
+interface Vertex {
+  x: number;
+  y: number;
+}
+export interface Item {
+  name: string;
+  score: number;
+  vertices: Vertex[];
+}
 export async function POST(request: Request) {
   // Rate Limiter Code
   if (ratelimit) {
@@ -41,14 +50,24 @@ export async function POST(request: Request) {
   const { imageUrl } = await request.json();
 
   // POST request to Replicate to start the image restoration generation process
-  const output = await replicate.run(
-    "daanelson/yolox:ae0d70cebf6afb2ac4f5e4375eb599c178238b312c8325a9a114827ba869e3e9",
-    {
-      input: {
-        input_image: imageUrl,
-      },
-    }
-  );
+  const client = new vision.ImageAnnotatorClient({
+    keyFilename: "./rock-extension-404217-900289375b05.json",
+  });
+  if (client.objectLocalization) {
+    const [result] = await client.objectLocalization(imageUrl);
+    const objects = result.localizedObjectAnnotations?.map<Item>((obj) => {
+      const vertices = obj.boundingPoly?.normalizedVertices || [];
+      return {
+        name: obj.name || "",
+        score: obj.score || 0,
+        vertices: vertices.map<Vertex>((v) => ({
+          x: v.x || 0,
+          y: v.y || 0,
+        })),
+      };
+    });
+    return NextResponse.json(objects);
+  }
 
-  return NextResponse.json(output ? output : "Failed to restore image");
+  return NextResponse.json("Failed to restore image");
 }

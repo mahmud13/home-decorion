@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { UrlBuilder } from "@bytescale/sdk";
 import { UploadWidgetConfig } from "@bytescale/upload-widget";
 import { UploadDropzone } from "@bytescale/upload-widget-react";
@@ -16,6 +16,7 @@ import appendNewToName from "../../utils/appendNewToName";
 import downloadPhoto from "../../utils/downloadPhoto";
 import DropDown from "../../components/DropDown";
 import { roomType, rooms, themeType, themes } from "../../utils/dropdownTypes";
+import { Item } from "../annotate/route";
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -44,7 +45,10 @@ const options: UploadWidgetConfig = {
 export default function DreamPage() {
   const [originalPhoto, setOriginalPhoto] = useState<string | null>(null);
   const [restoredImage, setRestoredImage] = useState<string | null>(null);
-  const [annotatedImage, setAnnotatedImage] = useState<string | null>(null);
+  const [restoredImgElement, setRestoredImgElement] =
+    useState<HTMLImageElement | null>(null);
+  const [annotatedJson, setAnnotatedJson] = useState<Item[] | null>(null);
+  const [overlays, setOverlays] = useState<ReactNode | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
   const [sideBySide, setSideBySide] = useState<boolean>(false);
@@ -77,7 +81,10 @@ export default function DreamPage() {
       height="250px"
     />
   );
-
+  const onRestoredImageLoaded = (img: HTMLImageElement) => {
+    setRestoredImgElement(img);
+    setRestoredLoaded(true);
+  };
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
@@ -94,23 +101,50 @@ export default function DreamPage() {
       setError(newPhoto);
     } else {
       setRestoredImage(newPhoto[1]);
-      const output = await fetch("/annotate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imageUrl: newPhoto[1] }),
-      });
-      const resp = await output.json();
-      if(resp) {
-        console.log(resp);
-        setAnnotatedImage(resp.img);
-      }
+      annotatePhoto(newPhoto[1]);
     }
     setTimeout(() => {
       setLoading(false);
     }, 1300);
   }
+  useEffect(() => {
+    if (annotatedJson && restoredImage && restoredImgElement) {
+      setOverlays(
+        annotatedJson.map((item) => {
+          const imageWidth = restoredImgElement.width;
+          const imageHeight = restoredImgElement.height;
+          const { vertices } = item;
+          const minX = Math.min(
+            ...vertices.map((vertex) => vertex.x * imageWidth)
+          );
+          const minY = Math.min(
+            ...vertices.map((vertex) => vertex.y * imageHeight)
+          );
+          const maxX = Math.max(
+            ...vertices.map((vertex) => vertex.x * imageWidth)
+          );
+          const maxY = Math.max(
+            ...vertices.map((vertex) => vertex.y * imageHeight)
+          );
+          const rectX = minX;
+          const rectY = minY;
+          const rectWidth = maxX - minX;
+          const rectHeight = maxY - minY;
+          return <div style={{
+            left: rectX + 'px',
+            top: rectY + 'px',
+            width: rectWidth + 'px',
+            height: rectHeight + 'px',
+          }} 
+          onClick={(e) => {
+            e.preventDefault();
+            window.open("http://www.google.com/search?q=" + item.name, '_blank')
+          }}
+          className="annotation-rect"></div>;
+        })
+      );
+    }
+  }, [restoredImage, restoredImgElement, annotatedJson]);
   async function annotatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
@@ -122,11 +156,12 @@ export default function DreamPage() {
       body: JSON.stringify({ imageUrl: fileUrl }),
     });
 
-    let newPhoto = await res.json();
+    let response = await res.json();
     if (res.status !== 200) {
-      setError(newPhoto);
+      setError(response);
     } else {
-      setRestoredImage(newPhoto[1]);
+      console.log({ response });
+      setAnnotatedJson(response);
     }
     setTimeout(() => {
       setLoading(false);
@@ -235,42 +270,28 @@ export default function DreamPage() {
                 <div className="flex sm:space-x-4 sm:flex-row flex-col">
                   <div>
                     <h2 className="mb-1 font-medium text-lg">Original Room</h2>
-                    <Image
-                      alt="original photo"
-                      src={originalPhoto}
-                      className="rounded-2xl relative w-full h-96"
-                      width={475}
-                      height={475}
-                    />
+                      <Image
+                        alt="original photo"
+                        src={originalPhoto}
+                        className="rounded-2xl relative w-full h-96"
+                        width={475}
+                        height={475}
+                      />
                   </div>
                   <div className="sm:mt-0 mt-8">
                     <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
                     <a href={restoredImage} target="_blank" rel="noreferrer">
+                    <div className="image-container">
                       <Image
                         alt="restored photo"
                         src={restoredImage}
                         className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
                         width={475}
                         height={475}
-                        onLoadingComplete={() => setRestoredLoaded(true)}
+                        onLoadingComplete={(img) => onRestoredImageLoaded(img)}
                       />
-                    </a>
-                  </div>
-                </div>
-              )}
-              {annotatedImage && originalPhoto && (
-                <div className="flex sm:space-x-4 sm:flex-row flex-col">
-                  <div className="sm:mt-0 mt-8">
-                    <h2 className="mb-1 font-medium text-lg">Annotated Room</h2>
-                    <a href={annotatedImage} target="_blank" rel="noreferrer">
-                      <Image
-                        alt="restored photo"
-                        src={annotatedImage}
-                        className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
-                        width={475}
-                        height={475}
-                        onLoadingComplete={() => setRestoredLoaded(true)}
-                      />
+                      {overlays}
+                    </div>
                     </a>
                   </div>
                 </div>
