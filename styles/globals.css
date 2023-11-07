@@ -3,13 +3,10 @@
 @tailwind utilities;
 
 @media (min-width: 500px) {
-   
   .background-gradient::before {
-   
-   
     background: radial-gradient(circle at center, green 0, green, green 100%);
     z-index: -10;
-    content: "";
+    content: '';
     position: absolute;
     inset: 0px;
     transform: scale(1);
@@ -18,12 +15,12 @@
 }
 
 .image-container {
-    position: relative;
+  position: relative;
 }
 
 .annotation-rect {
-    position: absolute;
-}    
+  position: absolute;
+}
 .annotation-rect:hover {
-    border: 2px solid red;
-} 
+  border: 2px solid red;
+}

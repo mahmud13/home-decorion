@@ -1,29 +1,29 @@
-import { Analytics } from "@vercel/analytics/react";
-import { Metadata } from "next";
-import "../styles/globals.css";
+import { Analytics } from '@vercel/analytics/react';
+import { Metadata } from 'next';
+import '../styles/globals.css';
 
-let title = "Dream Room Generator";
-let description = "Generate your dream room in seconds.";
-let ogimage = "https://roomgpt-demo.vercel.app/og-image.png";
-let sitename = "HomeDecorion";
+let title = 'Dream Room Generator';
+let description = 'Generate your dream room in seconds.';
+let ogimage = 'https://roomgpt-demo.vercel.app/og-image.png';
+let sitename = 'HomeDecorion';
 
 export const metadata: Metadata = {
   title,
   description,
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
   openGraph: {
     images: [ogimage],
     title,
     description,
-    url: "https://roomgpt-demo.vercel.app",
+    url: 'https://roomgpt-demo.vercel.app',
     siteName: sitename,
-    locale: "en_US",
-    type: "website",
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     images: [ogimage],
     title,
     description,
@@ -36,8 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-[#17181C] text-white">
+    <html
+      lang="en"
+      className="h-ful">
+      <body className="bg-[#17181C] text-white h-full">
         {children}
         <Analytics />
       </body>

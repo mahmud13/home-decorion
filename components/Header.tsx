@@ -1,22 +1,38 @@
-import Image from "next/image";
-import Link from "next/link";
+import Link from 'next/link';
+import SquigglyLines from './SquigglyLines';
+import Navbar from './Navbar';
 
 export default function Header() {
   return (
-    <header className="flex flex-col xs:flex-row justify-between items-center w-full mt-3 border-b pb-7 sm:px-4 px-2 border-gray-500 gap-2">
-      <Link href="/" className="flex space-x-2">
-        <Image
-          alt="header text"
-          src="/bed.svg"
-          className="sm:w-10 sm:h-10 w-9 h-9"
-          width={24}
-          height={24}
-        />
-        <h1 className="sm:text-3xl text-xl font-bold ml-2 tracking-tight">
-         DECORION 
-        </h1>
-      </Link>
-   
+    <header>
+      <Navbar isLoggedIn={false} />
+      <div className="bg-[url('/header-bg.jpg')] md:h-screen bg-cover bg-no-repeat">
+        <div className="h-full bg-gray-950/30 backdrop-brightness-50 text-white py-10 md:py-0">
+          <div className="max-w-7xl h-full mx-auto px-2 sm:px-6 lg:px-8 flex flex-col justify-center items-center md:items-start">
+            <h1 className="max-w-4xl text-center md:text-start font-display text-4xl font-bold tracking-normal sm:text-7xl">
+              <span> Generating dream rooms</span>
+              <span className="relative whitespace-nowrap text-[#ff4800]">
+                <SquigglyLines />
+                <span className="relative">using AI</span>
+              </span>{' '}
+              for everyone.
+            </h1>
+            <h2 className="mt-6 md:mt-12 max-w-xl text-base md:text-xl text-center md:text-start  text-white leading-7">
+              <span>
+                Take a picture of your room and see how your room looks in
+                different themes. remodel your room today.
+              </span>
+            </h2>
+            <div className="mt-10 ">
+              <Link
+                href={'/login'}
+                className="bg-[#ff4800] text-white  hover:bg-[rgb(74,199,40)] hover:text-white rounded-full transition-all px-8 md:px-10 py-2 md:py-3 text-sm font-medium">
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

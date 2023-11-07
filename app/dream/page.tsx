@@ -1,43 +1,36 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
-import { ReactNode, useEffect, useState } from "react";
-import { UrlBuilder } from "@bytescale/sdk";
-import { UploadWidgetConfig } from "@bytescale/upload-widget";
-import { UploadDropzone } from "@bytescale/upload-widget-react";
-import { CompareSlider } from "../../components/CompareSlider";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import LoadingDots from "../../components/LoadingDots";
-import ResizablePanel from "../../components/ResizablePanel";
-import Toggle from "../../components/Toggle";
-import appendNewToName from "../../utils/appendNewToName";
-import downloadPhoto from "../../utils/downloadPhoto";
-import DropDown from "../../components/DropDown";
-import { roomType, rooms, themeType, themes } from "../../utils/dropdownTypes";
-import { Item } from "../annotate/route";
+import { UrlBuilder } from '@bytescale/sdk';
+import { UploadWidgetConfig } from '@bytescale/upload-widget';
+import { UploadDropzone } from '@bytescale/upload-widget-react';
+import { ReactNode, useEffect, useState } from 'react';
+import Footer from '../../components/Footer';
+import Navbar from '../../components/Navbar';
+import UploadPhoto from '../../components/UploadPhoto';
+import { roomType, themeType } from '../../utils/dropdownTypes';
+import { Item } from '../annotate/route';
+import GeneratePhoto from '../../components/GeneratePhoto';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
     ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
-    : "free",
+    : 'free',
   maxFileCount: 1,
-  mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+  mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
   editor: { images: { crop: false } },
   styles: {
     colors: {
-      primary: "#2563EB", // Primary buttons & links
-      error: "#d23f4d", // Error messages
-      shade100: "#fff", // Standard text
-      shade200: "#fffe", // Secondary button text
-      shade300: "#fffd", // Secondary button text (hover)
-      shade400: "#fffc", // Welcome text
-      shade500: "#fff9", // Modal close button
-      shade600: "#fff7", // Border
-      shade700: "#fff2", // Progress indicator background
-      shade800: "#fff1", // File item background
-      shade900: "#ffff", // Various (draggable crop buttons, etc.)
+      primary: '#ff4800', // Primary buttons & links
+      error: '#d23f4d', // Error messages
+      shade100: '#fff', // Standard text
+      shade200: '#000', // Secondary button text
+      shade300: '#000', // Secondary button text (hover)
+      shade400: '#000000', // Welcome text
+      shade500: '#fff9', // Modal close button
+      shade600: '#BBBBBB', // Border
+      shade700: '#fff2', // Progress indicator background
+      shade800: '#1A1A1A', // File item background
+      shade900: '#ffff', // Various (draggable crop buttons, etc.)
     },
   },
 };
@@ -54,8 +47,8 @@ export default function DreamPage() {
   const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
-  const [theme, setTheme] = useState<themeType>("Modern");
-  const [room, setRoom] = useState<roomType>("Living Room");
+  const [theme, setTheme] = useState<themeType>('Modern');
+  const [room, setRoom] = useState<roomType>('Living Room');
 
   const UploadDropZone = () => (
     <UploadDropzone
@@ -68,8 +61,8 @@ export default function DreamPage() {
             accountId: image.accountId,
             filePath: image.filePath,
             options: {
-              transformation: "preset",
-              transformationPreset: "thumbnail",
+              transformation: 'preset',
+              transformationPreset: 'thumbnail',
             },
           });
           setPhotoName(imageName);
@@ -88,10 +81,10 @@ export default function DreamPage() {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch("/generate", {
-      method: "POST",
+    const res = await fetch('/generate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ imageUrl: fileUrl, theme, room }),
     });
@@ -130,17 +123,23 @@ export default function DreamPage() {
           const rectY = minY;
           const rectWidth = maxX - minX;
           const rectHeight = maxY - minY;
-          return <div style={{
-            left: rectX + 'px',
-            top: rectY + 'px',
-            width: rectWidth + 'px',
-            height: rectHeight + 'px',
-          }} 
-          onClick={(e) => {
-            e.preventDefault();
-            window.open("http://www.google.com/search?q=" + item.name, '_blank')
-          }}
-          className="annotation-rect"></div>;
+          return (
+            <div
+              style={{
+                left: rectX + 'px',
+                top: rectY + 'px',
+                width: rectWidth + 'px',
+                height: rectHeight + 'px',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  'http://www.google.com/search?q=' + item.name,
+                  '_blank'
+                );
+              }}
+              className="annotation-rect"></div>
+          );
         })
       );
     }
@@ -148,10 +147,10 @@ export default function DreamPage() {
   async function annotatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch("/annotate", {
-      method: "POST",
+    const res = await fetch('/annotate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ imageUrl: fileUrl }),
     });
@@ -169,9 +168,9 @@ export default function DreamPage() {
   }
 
   return (
-    <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-      <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
+    <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
+      <Navbar isLoggedIn={true} />
+      {/* <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
           Generate your <span className="text-blue-600">dream</span> room
         </h1>
@@ -235,17 +234,16 @@ export default function DreamPage() {
               )}
               {restoredImage && (
                 <div>
-                  Here's your remodeled <b>{room.toLowerCase()}</b> in the{" "}
-                  <b>{theme.toLowerCase()}</b> theme!{" "}
+                  Here's your remodeled <b>{room.toLowerCase()}</b> in the{' '}
+                  <b>{theme.toLowerCase()}</b> theme!{' '}
                 </div>
               )}
               <div
                 className={`${
-                  restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
-                }`}
-              >
+                  restoredLoaded ? 'visible mt-6 -ml-8' : 'invisible'
+                }`}>
                 <Toggle
-                  className={`${restoredLoaded ? "visible mb-6" : "invisible"}`}
+                  className={`${restoredLoaded ? 'visible mb-6' : 'invisible'}`}
                   sideBySide={sideBySide}
                   setSideBySide={(newVal) => setSideBySide(newVal)}
                 />
@@ -270,28 +268,33 @@ export default function DreamPage() {
                 <div className="flex sm:space-x-4 sm:flex-row flex-col">
                   <div>
                     <h2 className="mb-1 font-medium text-lg">Original Room</h2>
-                      <Image
-                        alt="original photo"
-                        src={originalPhoto}
-                        className="rounded-2xl relative w-full h-96"
-                        width={475}
-                        height={475}
-                      />
+                    <Image
+                      alt="original photo"
+                      src={originalPhoto}
+                      className="rounded-2xl relative w-full h-96"
+                      width={475}
+                      height={475}
+                    />
                   </div>
                   <div className="sm:mt-0 mt-8">
                     <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
-                    <a href={restoredImage} target="_blank" rel="noreferrer">
-                    <div className="image-container">
-                      <Image
-                        alt="restored photo"
-                        src={restoredImage}
-                        className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
-                        width={475}
-                        height={475}
-                        onLoadingComplete={(img) => onRestoredImageLoaded(img)}
-                      />
-                      {overlays}
-                    </div>
+                    <a
+                      href={restoredImage}
+                      target="_blank"
+                      rel="noreferrer">
+                      <div className="image-container">
+                        <Image
+                          alt="restored photo"
+                          src={restoredImage}
+                          className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
+                          width={475}
+                          height={475}
+                          onLoadingComplete={(img) =>
+                            onRestoredImageLoaded(img)
+                          }
+                        />
+                        {overlays}
+                      </div>
                     </a>
                   </div>
                 </div>
@@ -299,18 +302,19 @@ export default function DreamPage() {
               {loading && (
                 <button
                   disabled
-                  className="bg-blue-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40"
-                >
+                  className="bg-blue-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40">
                   <span className="pt-4">
-                    <LoadingDots color="white" style="large" />
+                    <LoadingDots
+                      color="white"
+                      style="large"
+                    />
                   </span>
                 </button>
               )}
               {error && (
                 <div
                   className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mt-8"
-                  role="alert"
-                >
+                  role="alert">
                   <span className="block sm:inline">{error}</span>
                 </div>
               )}
@@ -323,8 +327,7 @@ export default function DreamPage() {
                       setRestoredLoaded(false);
                       setError(null);
                     }}
-                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
-                  >
+                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition">
                     Generate New Room
                   </button>
                 )}
@@ -336,8 +339,7 @@ export default function DreamPage() {
                         appendNewToName(photoName!)
                       );
                     }}
-                    className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition"
-                  >
+                    className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition">
                     Download Generated Room
                   </button>
                 )}
@@ -345,6 +347,15 @@ export default function DreamPage() {
             </motion.div>
           </AnimatePresence>
         </ResizablePanel>
+      </main> */}
+      <main className="bg-[#FCF3EC] w-full py-10 text-black text-center">
+        <h2 className="text-5xl font-bold mb-6">Generate your Drean Room</h2>
+        {/* {!originalPhoto && (
+          <UploadPhoto>
+            <UploadDropZone />
+          </UploadPhoto>
+        )} */}
+        <GeneratePhoto />
       </main>
       <Footer />
     </div>
