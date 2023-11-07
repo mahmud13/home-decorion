@@ -5,11 +5,11 @@ import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
 import { ReactNode, useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
+import GeneratePhoto from '../../components/GeneratePhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
 import { roomType, themeType } from '../../utils/dropdownTypes';
 import { Item } from '../annotate/route';
-import GeneratePhoto from '../../components/GeneratePhoto';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -67,7 +67,7 @@ export default function DreamPage() {
           });
           setPhotoName(imageName);
           setOriginalPhoto(imageUrl);
-          generatePhoto(imageUrl);
+          // generatePhoto(imageUrl);
         }
       }}
       width="670px"
@@ -254,7 +254,7 @@ export default function DreamPage() {
                   restored={restoredImage!}
                 />
               )}
-              {!originalPhoto && <UploadDropZone />}
+              
               {originalPhoto && !restoredImage && (
                 <Image
                   alt="original photo"
@@ -350,12 +350,13 @@ export default function DreamPage() {
       </main> */}
       <main className="bg-[#FCF3EC] w-full py-10 text-black text-center">
         <h2 className="text-5xl font-bold mb-6">Generate your Drean Room</h2>
-        {/* {!originalPhoto && (
+        {!originalPhoto ? (
           <UploadPhoto>
             <UploadDropZone />
           </UploadPhoto>
-        )} */}
-        <GeneratePhoto />
+        ) : (
+          <GeneratePhoto originalPhoto={originalPhoto} />
+        )}
       </main>
       <Footer />
     </div>
