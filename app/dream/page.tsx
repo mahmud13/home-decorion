@@ -4,8 +4,10 @@ import { UrlBuilder } from '@bytescale/sdk';
 import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
 import { ReactNode, useEffect, useState } from 'react';
+import { RingLoader } from 'react-spinners';
 import Footer from '../../components/Footer';
 import GeneratePhoto from '../../components/GeneratePhoto';
+import GeneratedPhoto from '../../components/GeneratedPhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
 import { roomType, rooms, themeType, themes } from '../../utils/dropdownTypes';
@@ -92,13 +94,12 @@ export default function DreamPage() {
         room: selectedRoom.name,
       }),
     });
-
-    let newPhoto = await res.json();
-    if (res.status !== 200) {
-      setError(newPhoto);
-    } else {
+    try {
+      let newPhoto = await res.json();
       setRestoredImage(newPhoto[1]);
       annotatePhoto(newPhoto[1]);
+    } catch (error) {
+      setError('something went wrong');
     }
     setTimeout(() => {
       setLoading(false);
@@ -172,13 +173,77 @@ export default function DreamPage() {
   }
   const handleSubmit = (e, imgUrl) => {
     e.preventDefault();
+    setError(null);
     if (budget >= 0) {
       generatePhoto(imgUrl);
     }
   };
+
+  const handleTryAgain = () => {
+    setError(null);
+  };
+
+  // decide what to render
+  let content = null;
+  if (loading)
+    content = (
+      <div className="flex items-center justify-center w-full h-screen z-50">
+        <div className="flex justify-center items-center space-x-1 text-sm text-gray-700">
+          <RingLoader
+            color="hsla(168, 67%, 53%, 1)"
+            size={200}
+          />
+          <div>Loading ...</div>
+        </div>
+      </div>
+    );
+  if (!loading && error !== '')
+    content = (
+      <div className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+        <div className="text-center">
+          <p className="text-base font-semibold text-red-600">500</p>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Something Went Wrong!
+          </h1>
+          <p className="mt-6 text-base leading-7 text-gray-600">
+            Sorry, we couldn’t find the page you’re looking for.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-x-6">
+            <button
+              onClick={handleTryAgain}
+              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  if (!originalPhoto && !loading && !error)
+    content = (
+      <UploadPhoto>
+        <UploadDropZone />
+      </UploadPhoto>
+    );
+  if (!loading && !error && originalPhoto)
+    content = (
+      <GeneratePhoto
+        originalPhoto={originalPhoto}
+        themes={themes}
+        selectedTheme={selectedTheme}
+        setSelectedTheme={setSelectedTheme}
+        rooms={rooms}
+        selectedRoom={selectedRoom}
+        setSelectedRoom={setSelectedRoom}
+        budget={budget}
+        setBudget={setBudget}
+        handleSubmit={handleSubmit}
+      />
+    );
+  if (!loading && !error && originalPhoto && restoredImage)
+    content = <GeneratedPhoto />;
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
-      <Navbar isLoggedIn={true} />
+      {!loading && <Navbar isLoggedIn={true} />}
       {/* <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
           Generate your <span className="text-blue-600">dream</span> room
@@ -357,28 +422,10 @@ export default function DreamPage() {
           </AnimatePresence>
         </ResizablePanel>
       </main> */}
-      <main className="bg-[#FCF3EC] w-full py-10 text-black text-center">
-        <h2 className="text-5xl font-bold mb-6">Generate your Dream Room</h2>
-        {!originalPhoto ? (
-          <UploadPhoto>
-            <UploadDropZone />
-          </UploadPhoto>
-        ) : (
-          <GeneratePhoto
-            originalPhoto={originalPhoto}
-            themes={themes}
-            selectedTheme={selectedTheme}
-            setSelectedTheme={setSelectedTheme}
-            rooms={rooms}
-            selectedRoom={selectedRoom}
-            setSelectedRoom={setSelectedRoom}
-            budget={budget}
-            setBudget={setBudget}
-            handleSubmit={handleSubmit}
-          />
-        )}
+      <main className="bg-[#FCF3EC] w-full text-black text-center">
+        {content}
       </main>
-      <Footer />
+      {!loading && <Footer />}
     </div>
   );
 }

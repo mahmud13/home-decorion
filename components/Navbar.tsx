@@ -15,7 +15,7 @@ export default function Navbar({ isLoggedIn }) {
   return (
     <Disclosure
       as="nav"
-      className="bg-gray-50 sticky top-0 z-50 w-full">
+      className="bg-gray-50 sticky top-0 z-30 w-full">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl py-2 px-2 sm:px-6 lg:px-8">
@@ -28,7 +28,7 @@ export default function Navbar({ isLoggedIn }) {
                     className="flex space-x-2">
                     <Image
                       alt="header text"
-                      src="/bed.svg"
+                      src="/logo.png"
                       className="sm:w-10 sm:h-10 w-9 h-9"
                       width={24}
                       height={24}
