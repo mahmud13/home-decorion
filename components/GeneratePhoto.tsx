@@ -1,17 +1,20 @@
 import { RadioGroup } from '@headlessui/react';
 import Image from 'next/image';
-import { useState } from 'react';
-import { rooms, themes } from '../utils/dropdownTypes';
 
-export default function GeneratePhoto({ originalPhoto }) {
-  const [themeSelected, setThemeSelected] = useState(themes[0]);
-  const [roomSelected, setRoomSelected] = useState(rooms[0]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+export default function GeneratePhoto({
+  originalPhoto,
+  themes,
+  selectedTheme,
+  setSelectedTheme,
+  rooms,
+  selectedRoom,
+  setSelectedRoom,
+  budget,
+  setBudget,
+  handleSubmit,
+}) {
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => handleSubmit(e, originalPhoto)}>
       <div className="mx-auto w-full px-4 xl:px-0 flex justify-center py-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 w-full max-w-[1100px] gap-8">
           <div className="px-4 py-5 col-span-1 w-full  h-full flex flex-col items-start bg-white rounded-xl border border-gray-200 p-2 lg:p-5 lg:py-8">
@@ -19,8 +22,8 @@ export default function GeneratePhoto({ originalPhoto }) {
               Room theme
             </div>
             <RadioGroup
-              value={themeSelected}
-              onChange={setThemeSelected}
+              value={selectedTheme}
+              onChange={setSelectedTheme}
               className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <RadioGroup.Label className="sr-only">
                 Server size
@@ -54,8 +57,8 @@ export default function GeneratePhoto({ originalPhoto }) {
               Room Types
             </div>
             <RadioGroup
-              value={roomSelected}
-              onChange={setRoomSelected}
+              value={selectedRoom}
+              onChange={setSelectedRoom}
               className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <RadioGroup.Label className="sr-only">
                 Server size
@@ -85,7 +88,10 @@ export default function GeneratePhoto({ originalPhoto }) {
               ))}
             </RadioGroup>
             <div className="w-full my-5 h-px bg-gray-200"></div>
-            <BudgetInput />
+            <BudgetInput
+              budget={budget}
+              setBudget={setBudget}
+            />
           </div>
           <div className="col-span-1 lg:col-span-2 w-full max-h-[900px] h-full flex flex-col items-center justify-start bg-white rounded-xl border border-gray-200 p-4 lg:p-7">
             <div className="w-full relative">
@@ -128,7 +134,7 @@ export default function GeneratePhoto({ originalPhoto }) {
   );
 }
 
-function BudgetInput() {
+function BudgetInput({ budget, setBudget }) {
   return (
     <div className="flex items-center">
       <label
@@ -139,9 +145,12 @@ function BudgetInput() {
       <div className="relative mt-2 rounded-md shadow-sm">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"></div>
         <input
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
           type="number"
           name="price"
           id="price"
+          min="1"
           className="block w-full rounded-md border-0 py-1.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="0.00"
         />

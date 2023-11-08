@@ -8,7 +8,7 @@ import Footer from '../../components/Footer';
 import GeneratePhoto from '../../components/GeneratePhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
-import { roomType, themeType } from '../../utils/dropdownTypes';
+import { roomType, rooms, themeType, themes } from '../../utils/dropdownTypes';
 import { Item } from '../annotate/route';
 
 const options: UploadWidgetConfig = {
@@ -47,8 +47,9 @@ export default function DreamPage() {
   const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
-  const [theme, setTheme] = useState<themeType>('Modern');
-  const [room, setRoom] = useState<roomType>('Living Room');
+  const [selectedTheme, setSelectedTheme] = useState<themeType>(themes[0]);
+  const [selectedRoom, setSelectedRoom] = useState<roomType>(rooms[0]);
+  const [budget, setBudget] = useState<number>(0);
 
   const UploadDropZone = () => (
     <UploadDropzone
@@ -67,7 +68,6 @@ export default function DreamPage() {
           });
           setPhotoName(imageName);
           setOriginalPhoto(imageUrl);
-          // generatePhoto(imageUrl);
         }
       }}
       width="670px"
@@ -86,7 +86,11 @@ export default function DreamPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ imageUrl: fileUrl, theme, room }),
+      body: JSON.stringify({
+        imageUrl: fileUrl,
+        theme: selectedTheme.name,
+        room: selectedRoom.name,
+      }),
     });
 
     let newPhoto = await res.json();
@@ -166,7 +170,12 @@ export default function DreamPage() {
       setLoading(false);
     }, 1300);
   }
-
+  const handleSubmit = (e, imgUrl) => {
+    e.preventDefault();
+    if (budget >= 0) {
+      generatePhoto(imgUrl);
+    }
+  };
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
       <Navbar isLoggedIn={true} />
@@ -349,13 +358,24 @@ export default function DreamPage() {
         </ResizablePanel>
       </main> */}
       <main className="bg-[#FCF3EC] w-full py-10 text-black text-center">
-        <h2 className="text-5xl font-bold mb-6">Generate your Drean Room</h2>
+        <h2 className="text-5xl font-bold mb-6">Generate your Dream Room</h2>
         {!originalPhoto ? (
           <UploadPhoto>
             <UploadDropZone />
           </UploadPhoto>
         ) : (
-          <GeneratePhoto originalPhoto={originalPhoto} />
+          <GeneratePhoto
+            originalPhoto={originalPhoto}
+            themes={themes}
+            selectedTheme={selectedTheme}
+            setSelectedTheme={setSelectedTheme}
+            rooms={rooms}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
+            budget={budget}
+            setBudget={setBudget}
+            handleSubmit={handleSubmit}
+          />
         )}
       </main>
       <Footer />
