@@ -13,7 +13,7 @@ import vintageImg from '../public/images/themes/vintage.png';
 
 export type themeType = {
   name: 'Modern' | 'Vintage' | 'Minimalist' | 'Professional' | 'Tropical';
-  img: String | StaticImageData;
+  img: string | StaticImageData;
 };
 
 export type roomType = {
@@ -24,7 +24,7 @@ export type roomType = {
     | 'Bathroom'
     | 'Office'
     | 'Gaming Room';
-  img: String | StaticImageData;
+  img: string | StaticImageData;
 };
 
 export const themes: themeType[] = [
