@@ -7,11 +7,11 @@ import { Fragment, useEffect, useState } from 'react';
 
 const navigation = [{ name: 'How it Works', href: '#', current: true }];
 
-function classNames(...classes) {
+function classNames(...classes:any) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar({ isLoggedIn }) {
+export default function Navbar({ isLoggedIn }:{isLoggedIn:boolean}) {
   return (
     <Disclosure
       as="nav"

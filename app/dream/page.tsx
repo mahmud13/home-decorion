@@ -83,7 +83,7 @@ export default function DreamPage() {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch('/generate', {
+    const res = await fetch('/generatev1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -265,13 +265,6 @@ export default function DreamPage() {
                         Choose your room theme.
                       </p>
                     </div>
-                    <DropDown
-                      theme={theme}
-                      setTheme={(newTheme) =>
-                        setTheme(newTheme as typeof theme)
-                      }
-                      themes={themes}
-                    />
                   </div>
                   <div className="space-y-4 w-full max-w-sm">
                     <div className="flex mt-10 items-center space-x-3">
@@ -285,11 +278,6 @@ export default function DreamPage() {
                         Choose your room type.
                       </p>
                     </div>
-                    <DropDown
-                      theme={room}
-                      setTheme={(newRoom) => setRoom(newRoom as typeof room)}
-                      themes={rooms}
-                    />
                   </div>
                   <div className="mt-4 w-full max-w-sm">
                     <div className="flex mt-6 w-96 items-center space-x-3">
