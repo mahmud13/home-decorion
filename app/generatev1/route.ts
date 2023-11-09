@@ -35,6 +35,7 @@ export async function POST(request: Request) {
   }
 
   const { imageUrl, theme, room } = await request.json();
+  console.log(imageUrl);
 
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch(
@@ -45,7 +46,10 @@ export async function POST(request: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        prompt: `a ${theme.toLowerCase()} ${room.toLowerCase()} A 3-seater sofa, a coffee table and a variety of home decors, designer wall in a living room, realistic, 4k, interior, Modern Asian, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic`,
+        prompt:
+          room === 'Gaming Room'
+            ? 'a room for gaming with gaming computers, gaming consoles, and gaming chairs'
+            : `a ${theme.toLowerCase()} ${room.toLowerCase()}, a variety of home decors, , realistic, 4k, interior, Modern Asian, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic`,
         negative_prompt:
           '(normal quality), (low quality), (worst quality), paintings, sketches,extra digit,fewer digits,cropped,worst quality',
         original_image: imageUrl,
@@ -57,13 +61,11 @@ export async function POST(request: Request) {
   );
 
   let jsonStartResponse = await startResponse.json();
-
   let downloadId = jsonStartResponse?.download_id;
 
   // GET request to get the status of the image restoration process & return the result when it's ready
-  let restoredImage: string | null = null;
-  while (!restoredImage) {
-    // Loop in 1s intervals until the alt text is ready
+  // let restoredImage: string | null | Blob = null;
+  if (downloadId) {
     console.log('polling for result...');
     let finalResponse = await fetch(
       `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
@@ -74,19 +76,17 @@ export async function POST(request: Request) {
         },
       }
     );
-    let jsonFinalResponse = await finalResponse.json();
-    const blob = await jsonFinalResponse.blob();
 
-    if (blob.status === 'succeeded') {
-      restoredImage = URL.createObjectURL(blob);
-    } else if (blob.status === 'failed') {
-      break;
-    } else {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
+    let jsonFinalResponse = await finalResponse.blob();
+    console.log(URL.createObjectURL(jsonFinalResponse));
+
+    const headers = new Headers();
+    headers.set('Content-Type', 'image/*');
+
+    return new NextResponse(jsonFinalResponse, {
+      status: 200,
+      statusText: 'OK',
+      headers,
+    });
   }
-
-  return NextResponse.json(
-    restoredImage ? restoredImage : 'Failed to restore image'
-  );
 }

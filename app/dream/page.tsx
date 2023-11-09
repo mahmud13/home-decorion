@@ -85,52 +85,23 @@ export default function DreamPage() {
     setLoading(true);
 
     try {
-      console.log(fileUrl);
-      const res = await fetch(
-        'http://california-a.tensordockmarketplace.com:20505/generate',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt:
-              'a A 3-seater sofa, a coffee table and a variety of home decors, designer wall in a living room, realistic, 4k, interior, Modern Asian, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic',
-            negative_prompt:
-              '(normal quality), (low quality), (worst quality), paintings, sketches,extra digit,fewer digits,cropped,worst quality',
-            original_image: fileUrl,
-            scale: 7.5,
-            steps: 40,
-            seed:
-              Math.floor(Math.random() * (999999999 - 10000000 + 1)) + 10000000,
-          }),
-        }
-      );
-      let newPhoto = await res.json();
-      let downloadId = newPhoto?.download_id;
-
-      // GET request to get the status of the image restoration process & return the result when it's ready
-      if (downloadId) {
-        let restoredImage: string | null = null;
-        while (!restoredImage) {
-          // Loop in 1s intervals until the alt text is ready
-          console.log('polling for result...');
-          let finalResponse = await fetch(
-            `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-          let blob = await finalResponse.blob();
-          restoredImage = URL.createObjectURL(blob);
-          console.log(restoredImage);
-          setRestoredImage(restoredImage);
-          annotatePhoto(blob);
-        }
-      }
+      const res = await fetch('/generatev1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageUrl: fileUrl,
+          theme: selectedTheme.name,
+          room: selectedRoom.name,
+        }),
+      });
+      let restoredImage: string | null = null;
+      let blob = await res.blob();
+      restoredImage = URL.createObjectURL(blob);
+      console.log(restoredImage);
+      setRestoredImage(restoredImage);
+      // annotatePhoto(blob);
     } catch (error) {
       setError('something went wrong');
     }

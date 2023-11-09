@@ -240,7 +240,6 @@ function MyTabs({
         })
       );
     }
-    console.log('result');
     console.log(annotatedJson);
   }, [restoredImage, restoredImgElement, annotatedJson]);
   useEffect(() => {
