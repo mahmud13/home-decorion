@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch(
-    'http://california-a.tensordockmarketplace.com:20203/generate',
+    'http://california-a.tensordockmarketplace.com:20505/generate',
     {
       method: 'POST',
       headers: {
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     // Loop in 1s intervals until the alt text is ready
     console.log('polling for result...');
     let finalResponse = await fetch(
-      `http://california-a.tensordockmarketplace.com:20203/download/${downloadId}`,
+      `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
       {
         method: 'GET',
         headers: {
