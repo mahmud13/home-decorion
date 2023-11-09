@@ -13,7 +13,7 @@ export default function HomePage() {
               <h3 className="font-bold text-5xl mb-4">How it Works</h3>
               <p>Create beatuful interior designs in just 3 simple steps!</p>
             </div>
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
               <Card
                 title="Upload Image"
                 description="Upload a picture of your space. "
