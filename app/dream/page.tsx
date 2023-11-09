@@ -6,12 +6,12 @@ import { UploadDropzone } from '@bytescale/upload-widget-react';
 import { FormEvent, ReactNode, useEffect, useState } from 'react';
 import { RingLoader } from 'react-spinners';
 import Footer from '../../components/Footer';
-import GeneratePhoto from '../../components/GeneratePhoto/GeneratePhoto';
-import GeneratedPhoto from '../../components/GeneratedPhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
 import { roomType, rooms, themeType, themes } from '../../utils/dropdownTypes';
-import { Item } from '../annotate/route';
+import { Item } from './_interfaces/Item';
+import GeneratedPhoto from './_components/GeneratedPhoto';
+import GeneratePhoto from './_components/GeneratePhoto/GeneratePhoto';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -40,15 +40,9 @@ const options: UploadWidgetConfig = {
 export default function DreamPage() {
   const [originalPhoto, setOriginalPhoto] = useState<string | null>(null);
   const [restoredImage, setRestoredImage] = useState<string | null>(null);
-  const [restoredImgElement, setRestoredImgElement] =
-    useState<HTMLImageElement | null>(null);
   const [annotatedJson, setAnnotatedJson] = useState<Item[] | null>(null);
-  const [overlays, setOverlays] = useState<ReactNode | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
-  const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [photoName, setPhotoName] = useState<string | null>(null);
   const [selectedTheme, setSelectedTheme] = useState<themeType>(themes[0]);
   const [selectedRoom, setSelectedRoom] = useState<roomType>(rooms[0]);
   const [budget, setBudget] = useState<number>(0);
@@ -68,7 +62,6 @@ export default function DreamPage() {
               transformationPreset: 'thumbnail',
             },
           });
-          setPhotoName(imageName);
           setOriginalPhoto(imageUrl);
         }
       }}
@@ -76,126 +69,42 @@ export default function DreamPage() {
       height="250px"
     />
   );
-  const onRestoredImageLoaded = (img: HTMLImageElement) => {
-    setRestoredImgElement(img);
-    setRestoredLoaded(true);
-  };
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
+    const res = await fetch("/dream/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl: fileUrl, theme: selectedTheme, room: selectedRoom }),
+    });
 
-    try {
-      console.log(fileUrl);
-      const res = await fetch(
-        'http://california-a.tensordockmarketplace.com:20505/generate',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt:
-              'a A 3-seater sofa, a coffee table and a variety of home decors, designer wall in a living room, realistic, 4k, interior, Modern Asian, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic',
-            negative_prompt:
-              '(normal quality), (low quality), (worst quality), paintings, sketches,extra digit,fewer digits,cropped,worst quality',
-            original_image: fileUrl,
-            scale: 7.5,
-            steps: 40,
-            seed:
-              Math.floor(Math.random() * (999999999 - 10000000 + 1)) + 10000000,
-          }),
-        }
-      );
-      let newPhoto = await res.json();
-      let downloadId = newPhoto?.download_id;
-
-      // GET request to get the status of the image restoration process & return the result when it's ready
-      if (downloadId) {
-        let restoredImage: string | null = null;
-        while (!restoredImage) {
-          // Loop in 1s intervals until the alt text is ready
-          console.log('polling for result...');
-          let finalResponse = await fetch(
-            `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-          let blob = await finalResponse.blob();
-          restoredImage = URL.createObjectURL(blob);
-          console.log(restoredImage);
-          setRestoredImage(restoredImage);
-          annotatePhoto(blob);
-        }
-      }
-    } catch (error) {
-      setError('something went wrong');
+    let newPhoto = await res.json();
+    console.log(newPhoto);
+    if (res.status !== 200) {
+      setError(newPhoto);
+    } else {
+      setRestoredImage(newPhoto.restoredImageUrl);
+      annotatePhoto(newPhoto.restoredImageUrl);
     }
     setTimeout(() => {
       setLoading(false);
     }, 1300);
   }
-  useEffect(() => {
-    if (annotatedJson && restoredImage && restoredImgElement) {
-      setOverlays(
-        annotatedJson.map((item) => {
-          const imageWidth = restoredImgElement.width;
-          const imageHeight = restoredImgElement.height;
-          const { vertices } = item;
-          const minX = Math.min(
-            ...vertices.map((vertex) => vertex.x * imageWidth)
-          );
-          const minY = Math.min(
-            ...vertices.map((vertex) => vertex.y * imageHeight)
-          );
-          const maxX = Math.max(
-            ...vertices.map((vertex) => vertex.x * imageWidth)
-          );
-          const maxY = Math.max(
-            ...vertices.map((vertex) => vertex.y * imageHeight)
-          );
-          const rectX = minX;
-          const rectY = minY;
-          const rectWidth = maxX - minX;
-          const rectHeight = maxY - minY;
-          return (
-            <div
-              style={{
-                left: rectX + 'px',
-                top: rectY + 'px',
-                width: rectWidth + 'px',
-                height: rectHeight + 'px',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  'http://www.google.com/search?q=' + item.name,
-                  '_blank'
-                );
-              }}
-              className="annotation-rect"></div>
-          );
-        })
-      );
-    }
-  }, [restoredImage, restoredImgElement, annotatedJson]);
 
-  async function annotatePhoto(fileBlob: any) {
+  async function annotatePhoto(restoredImageUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    // Create a FormData object and append the Blob
-    const formData = new FormData();
-    formData.append('image', fileBlob, 'image.jpg');
-    const res = await fetch('/annotate', {
-      method: 'POST',
-      body: formData,
+    const res = await fetch("/dream/api/annotate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl: restoredImageUrl }),
     });
 
     let response = await res.json();
-    console.log(response);
     if (res.status !== 200) {
       setError(response);
     } else {
@@ -285,84 +194,6 @@ export default function DreamPage() {
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
       {!loading && <Navbar isLoggedIn={true} />}
-      {/* <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
-        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          Generate your <span className="text-blue-600">dream</span> room
-        </h1>
-        <ResizablePanel>
-          <AnimatePresence mode="wait">
-            <motion.div className="flex justify-between items-center w-full flex-col mt-4">
-              {restoredLoaded && sideBySide && (
-                <CompareSlider
-                  original={originalPhoto!}
-                  restored={restoredImage!}
-                />
-              )}
-              {restoredImage && originalPhoto && !sideBySide && (
-                <div className="flex sm:space-x-4 sm:flex-row flex-col">
-                  <div>
-                    <h2 className="mb-1 font-medium text-lg">Original Room</h2>
-                    <Image
-                      alt="original photo"
-                      src={originalPhoto}
-                      className="rounded-2xl relative w-full h-96"
-                      width={475}
-                      height={475}
-                    />
-                  </div>
-                  <div className="sm:mt-0 mt-8">
-                    <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
-                    <a
-                      href={restoredImage}
-                      target="_blank"
-                      rel="noreferrer">
-                      <div className="image-container">
-                        <Image
-                          alt="restored photo"
-                          src={restoredImage}
-                          className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
-                          width={475}
-                          height={475}
-                          onLoadingComplete={(img) =>
-                            onRestoredImageLoaded(img)
-                          }
-                        />
-                        {overlays}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              <div className="flex space-x-2 justify-center">
-                {originalPhoto && !loading && (
-                  <button
-                    onClick={() => {
-                      setOriginalPhoto(null);
-                      setRestoredImage(null);
-                      setRestoredLoaded(false);
-                      setError(null);
-                    }}
-                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition">
-                    Generate New Room
-                  </button>
-                )}
-                {restoredLoaded && (
-                  <button
-                    onClick={() => {
-                      downloadPhoto(
-                        restoredImage!,
-                        appendNewToName(photoName!)
-                      );
-                    }}
-                    className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition">
-                    Download Generated Room
-                  </button>
-                )}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </ResizablePanel>
-      </main> */}
       <main className="bg-[#FCF3EC] w-full text-black text-center">
         {content}
       </main>

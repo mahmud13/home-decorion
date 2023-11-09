@@ -1,9 +1,10 @@
 import { Ratelimit } from "@upstash/ratelimit";
-import redis from "../../utils/redis";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import Replicate from "replicate";
 import vision from "@google-cloud/vision";
+import redis from "../../../../utils/redis";
+import { Vertex } from "../../_interfaces/Vertext";
+import { Item } from "../../_interfaces/Item";
 
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
@@ -13,15 +14,6 @@ const ratelimit = redis
       analytics: true,
     })
   : undefined;
-interface Vertex {
-  x: number;
-  y: number;
-}
-export interface Item {
-  name: string;
-  score: number;
-  vertices: Vertex[];
-}
 export async function POST(request: Request) {
   // Rate Limiter Code
   if (ratelimit) {
@@ -44,9 +36,6 @@ export async function POST(request: Request) {
     }
   }
 
-  const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_KEY,
-  });
   const { imageUrl } = await request.json();
 
   // POST request to Replicate to start the image restoration generation process
