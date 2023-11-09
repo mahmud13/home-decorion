@@ -3,10 +3,10 @@
 import { UrlBuilder } from '@bytescale/sdk';
 import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
-import { ReactNode, useEffect, useState } from 'react';
+import { FormEvent, ReactNode, useEffect, useState } from 'react';
 import { RingLoader } from 'react-spinners';
 import Footer from '../../components/Footer';
-import GeneratePhoto from '../../components/GeneratePhoto';
+import GeneratePhoto from '../../components/GeneratePhoto/GeneratePhoto';
 import GeneratedPhoto from '../../components/GeneratedPhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
@@ -171,7 +171,7 @@ export default function DreamPage() {
       setLoading(false);
     }, 1300);
   }
-  const handleSubmit = (e, imgUrl) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>, imgUrl: string) => {
     e.preventDefault();
     setError(null);
     if (budget >= 0) {

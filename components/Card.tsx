@@ -1,6 +1,10 @@
 import Image from 'next/image';
-
-export default function Card({ title, description, imgUrl }) {
+interface Props {
+  title: string;
+  description: string;
+  imgUrl: string;
+}
+const  Card = ({ title, description, imgUrl }: Props): JSX.Element => {
   return (
     <div className="max-w-sm bg-white rounded shadow p-4">
       <div>
@@ -25,3 +29,4 @@ export default function Card({ title, description, imgUrl }) {
     </div>
   );
 }
+export default Card;
