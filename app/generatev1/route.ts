@@ -51,32 +51,35 @@ export async function POST(request: Request) {
         original_image: imageUrl,
         scale: 7.5,
         steps: 40,
-        seed: 456576778,
+        seed: Math.floor(Math.random() * (999999999 - 10000000 + 1)) + 10000000,
       }),
     }
   );
 
   let jsonStartResponse = await startResponse.json();
 
-  let endpointUrl = jsonStartResponse.urls.get;
+  let downloadId = jsonStartResponse?.download_id;
 
   // GET request to get the status of the image restoration process & return the result when it's ready
   let restoredImage: string | null = null;
   while (!restoredImage) {
     // Loop in 1s intervals until the alt text is ready
     console.log('polling for result...');
-    let finalResponse = await fetch(endpointUrl, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + process.env.REPLICATE_API_KEY,
-      },
-    });
+    let finalResponse = await fetch(
+      `http://california-a.tensordockmarketplace.com:20203/download/${downloadId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     let jsonFinalResponse = await finalResponse.json();
+    const blob = await jsonFinalResponse.blob();
 
-    if (jsonFinalResponse.status === 'succeeded') {
-      restoredImage = jsonFinalResponse.output;
-    } else if (jsonFinalResponse.status === 'failed') {
+    if (blob.status === 'succeeded') {
+      restoredImage = URL.createObjectURL(blob);
+    } else if (blob.status === 'failed') {
       break;
     } else {
       await new Promise((resolve) => setTimeout(resolve, 1000));

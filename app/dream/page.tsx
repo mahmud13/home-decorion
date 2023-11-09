@@ -83,21 +83,54 @@ export default function DreamPage() {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch('/generatev1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        imageUrl: fileUrl,
-        theme: selectedTheme.name,
-        room: selectedRoom.name,
-      }),
-    });
+
     try {
+      console.log(fileUrl);
+      const res = await fetch(
+        'http://california-a.tensordockmarketplace.com:20203/generate',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt:
+              'a A 3-seater sofa, a coffee table and a variety of home decors, designer wall in a living room, realistic, 4k, interior, Modern Asian, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic',
+            negative_prompt:
+              '(normal quality), (low quality), (worst quality), paintings, sketches,extra digit,fewer digits,cropped,worst quality',
+            original_image: fileUrl,
+            scale: 7.5,
+            steps: 40,
+            seed:
+              Math.floor(Math.random() * (999999999 - 10000000 + 1)) + 10000000,
+          }),
+        }
+      );
       let newPhoto = await res.json();
-      setRestoredImage(newPhoto[1]);
-      annotatePhoto(newPhoto[1]);
+      let downloadId = newPhoto?.download_id;
+
+      // GET request to get the status of the image restoration process & return the result when it's ready
+      if (downloadId) {
+        let restoredImage: string | null = null;
+        while (!restoredImage) {
+          // Loop in 1s intervals until the alt text is ready
+          console.log('polling for result...');
+          let finalResponse = await fetch(
+            `http://california-a.tensordockmarketplace.com:20203/download/${downloadId}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          let blob = await finalResponse.blob();
+          restoredImage = URL.createObjectURL(blob);
+          console.log(restoredImage);
+          setRestoredImage(restoredImage);
+          annotatePhoto(restoredImage);
+        }
+      }
     } catch (error) {
       setError('something went wrong');
     }
@@ -149,6 +182,7 @@ export default function DreamPage() {
       );
     }
   }, [restoredImage, restoredImgElement, annotatedJson]);
+
   async function annotatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
@@ -240,7 +274,12 @@ export default function DreamPage() {
       />
     );
   if (!loading && !error && originalPhoto && restoredImage)
-    content = <GeneratedPhoto />;
+    content = (
+      <GeneratedPhoto
+        originalPhoto={originalPhoto}
+        restoredImage={restoredImage}
+      />
+    );
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
       {!loading && <Navbar isLoggedIn={true} />}
@@ -251,79 +290,10 @@ export default function DreamPage() {
         <ResizablePanel>
           <AnimatePresence mode="wait">
             <motion.div className="flex justify-between items-center w-full flex-col mt-4">
-              {!restoredImage && (
-                <>
-                  <div className="space-y-4 w-full max-w-sm">
-                    <div className="flex mt-3 items-center space-x-3">
-                      <Image
-                        src="/number-1-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Choose your room theme.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-4 w-full max-w-sm">
-                    <div className="flex mt-10 items-center space-x-3">
-                      <Image
-                        src="/number-2-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Choose your room type.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4 w-full max-w-sm">
-                    <div className="flex mt-6 w-96 items-center space-x-3">
-                      <Image
-                        src="/number-3-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Upload a picture of your room.
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-              {restoredImage && (
-                <div>
-                  Here's your remodeled <b>{room.toLowerCase()}</b> in the{' '}
-                  <b>{theme.toLowerCase()}</b> theme!{' '}
-                </div>
-              )}
-              <div
-                className={`${
-                  restoredLoaded ? 'visible mt-6 -ml-8' : 'invisible'
-                }`}>
-                <Toggle
-                  className={`${restoredLoaded ? 'visible mb-6' : 'invisible'}`}
-                  sideBySide={sideBySide}
-                  setSideBySide={(newVal) => setSideBySide(newVal)}
-                />
-              </div>
               {restoredLoaded && sideBySide && (
                 <CompareSlider
                   original={originalPhoto!}
                   restored={restoredImage!}
-                />
-              )}
-              
-              {originalPhoto && !restoredImage && (
-                <Image
-                  alt="original photo"
-                  src={originalPhoto}
-                  className="rounded-2xl h-96"
-                  width={475}
-                  height={475}
                 />
               )}
               {restoredImage && originalPhoto && !sideBySide && (
@@ -359,25 +329,6 @@ export default function DreamPage() {
                       </div>
                     </a>
                   </div>
-                </div>
-              )}
-              {loading && (
-                <button
-                  disabled
-                  className="bg-blue-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40">
-                  <span className="pt-4">
-                    <LoadingDots
-                      color="white"
-                      style="large"
-                    />
-                  </span>
-                </button>
-              )}
-              {error && (
-                <div
-                  className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mt-8"
-                  role="alert">
-                  <span className="block sm:inline">{error}</span>
                 </div>
               )}
               <div className="flex space-x-2 justify-center">
