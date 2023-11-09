@@ -87,7 +87,7 @@ export default function DreamPage() {
     try {
       console.log(fileUrl);
       const res = await fetch(
-        'http://california-a.tensordockmarketplace.com:20203/generate',
+        'http://california-a.tensordockmarketplace.com:20505/generate',
         {
           method: 'POST',
           headers: {
@@ -116,7 +116,7 @@ export default function DreamPage() {
           // Loop in 1s intervals until the alt text is ready
           console.log('polling for result...');
           let finalResponse = await fetch(
-            `http://california-a.tensordockmarketplace.com:20203/download/${downloadId}`,
+            `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
             {
               method: 'GET',
               headers: {
@@ -128,7 +128,7 @@ export default function DreamPage() {
           restoredImage = URL.createObjectURL(blob);
           console.log(restoredImage);
           setRestoredImage(restoredImage);
-          annotatePhoto(restoredImage);
+          annotatePhoto(blob);
         }
       }
     } catch (error) {
@@ -183,18 +183,19 @@ export default function DreamPage() {
     }
   }, [restoredImage, restoredImgElement, annotatedJson]);
 
-  async function annotatePhoto(fileUrl: string) {
+  async function annotatePhoto(fileBlob: any) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
+    // Create a FormData object and append the Blob
+    const formData = new FormData();
+    formData.append('image', fileBlob, 'image.jpg');
     const res = await fetch('/annotate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageUrl: fileUrl }),
+      body: formData,
     });
 
     let response = await res.json();
+    console.log(response);
     if (res.status !== 200) {
       setError(response);
     } else {
@@ -278,6 +279,7 @@ export default function DreamPage() {
       <GeneratedPhoto
         originalPhoto={originalPhoto}
         restoredImage={restoredImage}
+        annotatedJson={annotatedJson}
       />
     );
   return (

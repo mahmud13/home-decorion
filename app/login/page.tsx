@@ -5,9 +5,9 @@ export default function LoginPage() {
   return (
     <>
       <div className="bg-[#FCF3EC] h-screen">
-        <div className="px-20 ">
-          <div className="bg-white shadow-lg flex justify-center gap-6 h-[680px]">
-            <div className="w-1/2">
+        <div className="px-4 md:px-20 ">
+          <div className="bg-white shadow-lg md:flex md:justify-center md:gap-6 h-[680px]">
+            <div className="md:w-1/2 hidden md:block">
               <Image
                 alt=""
                 src="/generated-pic-2.jpg"
@@ -16,7 +16,7 @@ export default function LoginPage() {
                 height={600}
               />
             </div>
-            <div className="w-1/2 flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8">
+            <div className="w-full md:w-1/2 flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8">
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Link
                   href="/"

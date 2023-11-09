@@ -1,13 +1,15 @@
 import { Tab } from '@headlessui/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 export default function GeneratedPhoto({
   originalPhoto,
   restoredImage,
+  annotatedJson,
 }: {
   originalPhoto: string;
   restoredImage: string;
+  annotatedJson: any;
 }): JSX.Element {
   return (
     <div className="mx-auto w-full px-4 xl:px-8 flex justify-center py-4">
@@ -166,7 +168,8 @@ export default function GeneratedPhoto({
         <div className="order-first lg:order-last col-span-1 lg:col-span-2 w-full max-w- max-h-[900px] h-screen flex flex-col items-center justify-start bg-white rounded-xl border border-gray-200 p-4 lg:p-7 overflow-y-auto no-scrollbar">
           <MyTabs
             beforeImg={originalPhoto}
-            afterImg={restoredImage}
+            restoredImage={restoredImage}
+            annotatedJson={annotatedJson}
           />
         </div>
       </div>
@@ -180,17 +183,69 @@ function classNames(...classes: string[]) {
 
 function MyTabs({
   beforeImg,
-  afterImg,
+  restoredImage,
+  annotatedJson,
 }: {
   beforeImg: string;
-  afterImg: string;
+  restoredImage: string;
+  annotatedJson: any;
 }) {
   const [restoredImgElement, setRestoredImgElement] =
     useState<HTMLImageElement | null>(null);
+  const [overlays, setOverlays] = useState<ReactNode | null>(null);
 
   const onRestoredImageLoaded = (img: HTMLImageElement) => {
     setRestoredImgElement(img);
   };
+  useEffect(() => {
+    if (annotatedJson && restoredImage && restoredImgElement) {
+      setOverlays(
+        annotatedJson.map((item) => {
+          const imageWidth = restoredImgElement.width;
+          const imageHeight = restoredImgElement.height;
+          const { vertices } = item;
+          const minX = Math.min(
+            ...vertices.map((vertex) => vertex.x * imageWidth)
+          );
+          const minY = Math.min(
+            ...vertices.map((vertex) => vertex.y * imageHeight)
+          );
+          const maxX = Math.max(
+            ...vertices.map((vertex) => vertex.x * imageWidth)
+          );
+          const maxY = Math.max(
+            ...vertices.map((vertex) => vertex.y * imageHeight)
+          );
+          const rectX = minX;
+          const rectY = minY;
+          const rectWidth = maxX - minX;
+          const rectHeight = maxY - minY;
+          return (
+            <div
+              style={{
+                left: rectX + 'px',
+                top: rectY + 'px',
+                width: rectWidth + 'px',
+                height: rectHeight + 'px',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  'http://www.google.com/search?q=' + item.name,
+                  '_blank'
+                );
+              }}
+              className="annotation-rect"></div>
+          );
+        })
+      );
+    }
+    console.log('result');
+    console.log(annotatedJson);
+  }, [restoredImage, restoredImgElement, annotatedJson]);
+  useEffect(() => {
+    console.log(overlays);
+  }, [overlays]);
   return (
     <div className="w-full px-2   sm:px-0">
       <Tab.Group defaultIndex={1}>
@@ -239,14 +294,17 @@ function MyTabs({
               'rounded-xl bg-white p-3',
               'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
             )}>
-            <Image
-              alt="generated-image"
-              src={afterImg}
-              className="w-full mx-auto max-h-[460px]"
-              width={500}
-              height={500}
-              onLoadingComplete={(img) => onRestoredImageLoaded(img)}
-            />
+            <div className="image-container">
+              <Image
+                alt="generated-image"
+                src={restoredImage}
+                className="w-full mx-auto max-h-[460px]"
+                width={500}
+                height={500}
+                onLoadingComplete={(img) => onRestoredImageLoaded(img)}
+              />
+              {overlays}
+            </div>
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
