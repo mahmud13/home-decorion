@@ -5,10 +5,10 @@ import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
 import { FormEvent, ReactNode, useEffect, useState } from 'react';
 import { RingLoader } from 'react-spinners';
-import Footer from '../../components/Footer';
-import Navbar from '../../components/Navbar';
-import UploadPhoto from '../../components/UploadPhoto';
-import { roomType, rooms, themeType, themes } from '../../utils/dropdownTypes';
+import Footer from '@components/Footer';
+import Navbar from '@components/Navbar';
+import UploadPhoto from '@components/UploadPhoto';
+import { roomType, rooms, themeType, themes } from '@utils/dropdownTypes';
 import { Item } from './_interfaces/Item';
 import GeneratedPhoto from './_components/GeneratedPhoto';
 import GeneratePhoto from './_components/GeneratePhoto/GeneratePhoto';
@@ -90,7 +90,7 @@ export default function DreamPage() {
       restoredImage = URL.createObjectURL(blob);
       console.log(restoredImage);
       setRestoredImage(restoredImage);
-      // annotatePhoto(blob);
+      annotatePhoto(blob);
     } catch (error) {
       setError('something went wrong');
     }
@@ -98,50 +98,6 @@ export default function DreamPage() {
       setLoading(false);
     }, 1300);
   }
-  useEffect(() => {
-    if (annotatedJson && restoredImage && restoredImgElement) {
-      setOverlays(
-        annotatedJson.map((item) => {
-          const imageWidth = restoredImgElement.width;
-          const imageHeight = restoredImgElement.height;
-          const { vertices } = item;
-          const minX = Math.min(
-            ...vertices.map((vertex) => vertex.x * imageWidth)
-          );
-          const minY = Math.min(
-            ...vertices.map((vertex) => vertex.y * imageHeight)
-          );
-          const maxX = Math.max(
-            ...vertices.map((vertex) => vertex.x * imageWidth)
-          );
-          const maxY = Math.max(
-            ...vertices.map((vertex) => vertex.y * imageHeight)
-          );
-          const rectX = minX;
-          const rectY = minY;
-          const rectWidth = maxX - minX;
-          const rectHeight = maxY - minY;
-          return (
-            <div
-              style={{
-                left: rectX + 'px',
-                top: rectY + 'px',
-                width: rectWidth + 'px',
-                height: rectHeight + 'px',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  'http://www.google.com/search?q=' + item.name,
-                  '_blank'
-                );
-              }}
-              className="annotation-rect"></div>
-          );
-        })
-      );
-    }
-  }, [restoredImage, restoredImgElement, annotatedJson]);
 
   async function annotatePhoto(fileBlob: any) {
     await new Promise((resolve) => setTimeout(resolve, 200));

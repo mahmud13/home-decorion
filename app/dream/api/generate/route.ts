@@ -1,9 +1,8 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import redis from "../../../../utils/redis";
-import { NextApiRequest } from "next";
-import { roomType, themeType } from "../../../../utils/dropdownTypes";
+import redis from "@utils/redis";
+import { roomType, themeType } from "@utils/dropdownTypes";
 
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
