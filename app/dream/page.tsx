@@ -101,7 +101,7 @@ export default function DreamPage() {
       restoredImage = URL.createObjectURL(blob);
       console.log(restoredImage);
       setRestoredImage(restoredImage);
-      // annotatePhoto(blob);
+      annotatePhoto(blob);
     } catch (error) {
       setError('something went wrong');
     }
@@ -154,12 +154,13 @@ export default function DreamPage() {
     }
   }, [restoredImage, restoredImgElement, annotatedJson]);
 
-  async function annotatePhoto(fileBlob: any) {
+  async function annotatePhoto(imageBlob: Blob) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
     // Create a FormData object and append the Blob
     const formData = new FormData();
-    formData.append('image', fileBlob, 'image.jpg');
+    formData.append('image', imageBlob);
+
     const res = await fetch('/annotate', {
       method: 'POST',
       body: formData,
