@@ -6,12 +6,12 @@ import { UploadDropzone } from '@bytescale/upload-widget-react';
 import { FormEvent, ReactNode, useEffect, useState } from 'react';
 import { RingLoader } from 'react-spinners';
 import Footer from '../../components/Footer';
-import GeneratePhoto from '../../components/GeneratePhoto/GeneratePhoto';
-import GeneratedPhoto from '../../components/GeneratedPhoto';
 import Navbar from '../../components/Navbar';
 import UploadPhoto from '../../components/UploadPhoto';
 import { roomType, rooms, themeType, themes } from '../../utils/dropdownTypes';
-import { Item } from '../annotate/route';
+import { Item } from './_interfaces/Item';
+import GeneratedPhoto from './_components/GeneratedPhoto';
+import GeneratePhoto from './_components/GeneratePhoto/GeneratePhoto';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -40,15 +40,9 @@ const options: UploadWidgetConfig = {
 export default function DreamPage() {
   const [originalPhoto, setOriginalPhoto] = useState<string | null>(null);
   const [restoredImage, setRestoredImage] = useState<string | null>(null);
-  const [restoredImgElement, setRestoredImgElement] =
-    useState<HTMLImageElement | null>(null);
   const [annotatedJson, setAnnotatedJson] = useState<Item[] | null>(null);
-  const [overlays, setOverlays] = useState<ReactNode | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
-  const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [photoName, setPhotoName] = useState<string | null>(null);
   const [selectedTheme, setSelectedTheme] = useState<themeType>(themes[0]);
   const [selectedRoom, setSelectedRoom] = useState<roomType>(rooms[0]);
   const [budget, setBudget] = useState<number>(0);
@@ -68,7 +62,6 @@ export default function DreamPage() {
               transformationPreset: 'thumbnail',
             },
           });
-          setPhotoName(imageName);
           setOriginalPhoto(imageUrl);
         }
       }}
@@ -76,10 +69,6 @@ export default function DreamPage() {
       height="250px"
     />
   );
-  const onRestoredImageLoaded = (img: HTMLImageElement) => {
-    setRestoredImgElement(img);
-    setRestoredLoaded(true);
-  };
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
@@ -101,7 +90,7 @@ export default function DreamPage() {
       restoredImage = URL.createObjectURL(blob);
       console.log(restoredImage);
       setRestoredImage(restoredImage);
-      annotatePhoto(blob);
+      // annotatePhoto(blob);
     } catch (error) {
       setError('something went wrong');
     }
@@ -154,20 +143,18 @@ export default function DreamPage() {
     }
   }, [restoredImage, restoredImgElement, annotatedJson]);
 
-  async function annotatePhoto(imageBlob: Blob) {
+  async function annotatePhoto(fileBlob: any) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
     // Create a FormData object and append the Blob
     const formData = new FormData();
-    formData.append('image', imageBlob);
-
+    formData.append('image', fileBlob, 'image.jpg');
     const res = await fetch('/annotate', {
       method: 'POST',
       body: formData,
     });
 
     let response = await res.json();
-    console.log(response);
     if (res.status !== 200) {
       setError(response);
     } else {
@@ -257,84 +244,6 @@ export default function DreamPage() {
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
       {!loading && <Navbar isLoggedIn={true} />}
-      {/* <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
-        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          Generate your <span className="text-blue-600">dream</span> room
-        </h1>
-        <ResizablePanel>
-          <AnimatePresence mode="wait">
-            <motion.div className="flex justify-between items-center w-full flex-col mt-4">
-              {restoredLoaded && sideBySide && (
-                <CompareSlider
-                  original={originalPhoto!}
-                  restored={restoredImage!}
-                />
-              )}
-              {restoredImage && originalPhoto && !sideBySide && (
-                <div className="flex sm:space-x-4 sm:flex-row flex-col">
-                  <div>
-                    <h2 className="mb-1 font-medium text-lg">Original Room</h2>
-                    <Image
-                      alt="original photo"
-                      src={originalPhoto}
-                      className="rounded-2xl relative w-full h-96"
-                      width={475}
-                      height={475}
-                    />
-                  </div>
-                  <div className="sm:mt-0 mt-8">
-                    <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
-                    <a
-                      href={restoredImage}
-                      target="_blank"
-                      rel="noreferrer">
-                      <div className="image-container">
-                        <Image
-                          alt="restored photo"
-                          src={restoredImage}
-                          className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
-                          width={475}
-                          height={475}
-                          onLoadingComplete={(img) =>
-                            onRestoredImageLoaded(img)
-                          }
-                        />
-                        {overlays}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              <div className="flex space-x-2 justify-center">
-                {originalPhoto && !loading && (
-                  <button
-                    onClick={() => {
-                      setOriginalPhoto(null);
-                      setRestoredImage(null);
-                      setRestoredLoaded(false);
-                      setError(null);
-                    }}
-                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition">
-                    Generate New Room
-                  </button>
-                )}
-                {restoredLoaded && (
-                  <button
-                    onClick={() => {
-                      downloadPhoto(
-                        restoredImage!,
-                        appendNewToName(photoName!)
-                      );
-                    }}
-                    className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition">
-                    Download Generated Room
-                  </button>
-                )}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </ResizablePanel>
-      </main> */}
       <main className="bg-[#FCF3EC] w-full text-black text-center">
         {content}
       </main>

@@ -42,7 +42,7 @@ export default function Navbar({ isLoggedIn }:{isLoggedIn:boolean}) {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {!isLoggedIn ? (
                   <Link
-                    href={'/login'}
+                    href={'/dream'}
                     className="bg-[#ff4800] text-white  hover:bg-[#4ac728] hover:text-white rounded-full transition-all px-4 md:px-7 py-2 md:py-3 text-sm font-medium">
                     Get Started
                   </Link>

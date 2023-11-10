@@ -5,7 +5,7 @@ export default function page() {
         className="space-y-6"
         action="#"
         method="POST">
-        <div className="flex border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200">
+        <div className="flex focus-within:border-[#ff4800]  border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200">
           <div className="px-4 border-r-2 mr-2  ">
             <svg
               width="20"
@@ -18,24 +18,25 @@ export default function page() {
                 fill="#6A6A6A"></path>
             </svg>
           </div>
-          <div className="flex flex-col items-start justify-center w-full  relative">
-            <label className="text-neutral-400 text-sm pl-3 opacity-100">
-              Email address
-            </label>
+          <div className="flex flex-col items-start justify-center w-full  relative ">
             <input
               type="email"
-              className=" block h-6 rounded-lg w-full border-none transform transition-transform ease-out duration-500
-             translate-y-0
+              name="email"
+              className="peer order-1 block h-6 rounded-lg w-full border-none 
               bg-white px-3 py-2 placeholder-stone-900 text-stone-900 text-base font-medium
            focus:outline-none focus:ring-0 focus:ring-offset-0
             disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed disabled:bg-gray-200"
               placeholder="Enter email address"
               required
-              value=""
             />
+            <label
+              htmlFor="email"
+              className="peer-focus:hidden text-neutral-400 text-sm pl-3 opacity-100">
+              Email address
+            </label>
           </div>
         </div>
-        <div className="flex border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200">
+        <div className="flex focus-within:border-[#ff4800] border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200 relative">
           <div className="px-4 border-r-2 mr-2  ">
             <svg
               width="20"
@@ -58,45 +59,36 @@ export default function page() {
               </defs>
             </svg>
           </div>
-          <div className="flex flex-col items-start justify-center w-full  relative">
-            <label className="text-neutral-400 text-sm pl-3 opacity-100">
-              Your password
-            </label>
+          <div className="flex flex-col items-start justify-center w-full ">
             <input
               type="password"
               name="password"
-              className=" block h-6 rounded-lg w-full border-none transform transition-transform ease-out duration-500
-             translate-y-0
+              className="order-1 peer block h-6 rounded-lg w-full border-none 
               bg-white px-3 py-2 placeholder-stone-900 text-stone-900 text-base font-medium
            focus:outline-none focus:ring-0 focus:ring-offset-0
             disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed disabled:bg-gray-200"
               placeholder="Enter Password"
-              value=""
             />
-            <div className="absolute top-[10px] right-[16px] cursor-pointer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="#000"
-                className="w-6 h-6">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
-              </svg>
-            </div>
+            <label className="peer-focus:hidden text-neutral-400 text-sm pl-3 opacity-100">
+              Your password
+            </label>
+          </div>
+          <div className="absolute top-[18px] right-[16px] cursor-pointer">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="#000"
+              className="w-6 h-6">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
+            </svg>
           </div>
         </div>
-        <div className="w-full my-6 h-6 relative">
-          <div className="w-full h-px left-0 top-[11px] absolute bg-zinc-100"></div>
-          <div className="w-[25px] h-6 px-1  right-0 left-0 mx-auto top-0 absolute bg-white justify-start items-start gap-2.5 inline-flex">
-            <div className="text-neutral-600 text-sm font-medium leading-normal">
-              Or
-            </div>
-          </div>
-        </div>
+
         <div className="flex flex-col items-center max-w-[670px]">
           <button className="rounded-full text-sm lg:text-base font-bold border border-brand-textColor bg-brand-white  leading-normal shadow-md   active:shadow-lg text-brand-textColor px-20 py-4 transition ease-in-out duration-300 hover:cursor-pointer flex justify-center whitespace-nowrap relative w-full text-black">
             <span className="absolute top-4 left-5">
@@ -138,6 +130,14 @@ export default function page() {
             </span>
             Continue with Google
           </button>
+        </div>
+        <div className="w-full my-6 h-6 relative">
+          <div className="w-full h-px left-0 top-[11px] absolute bg-zinc-100"></div>
+          <div className="w-[25px] h-6 px-1  right-0 left-0 mx-auto top-0 absolute bg-white justify-start items-start gap-2.5 inline-flex">
+            <div className="text-neutral-600 text-sm font-medium leading-normal">
+              Or
+            </div>
+          </div>
         </div>
         <div>
           <button

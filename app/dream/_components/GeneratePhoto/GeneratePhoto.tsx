@@ -2,7 +2,7 @@ import { RadioGroup } from "@headlessui/react";
 import Image from "next/image";
 import { FormEvent } from "react";
 import BudgetInput from "./BudgetInput";
-import { roomType, themeType } from "../../utils/dropdownTypes";
+import { roomType, themeType } from "../../../../utils/dropdownTypes";
 
 interface Props {
   originalPhoto: string;

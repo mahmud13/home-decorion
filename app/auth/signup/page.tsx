@@ -7,7 +7,7 @@ export default function page() {
         className="space-y-6"
         action="#"
         method="POST">
-        <div className="flex border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200">
+        <div className="focus-within:border-[#ff4800] flex border rounded-full mb-1 justify-center items-center p-2 min-h-[63.1px] border-gray-200">
           <div className="px-4 border-r-2 mr-2  ">
             <svg
               width="20"
@@ -21,21 +21,31 @@ export default function page() {
             </svg>
           </div>
           <div className="flex flex-col items-start justify-center w-full  relative">
-            <label className="text-neutral-400 text-sm pl-3 opacity-100">
-              Email address
-            </label>
             <input
               type="email"
-              className=" block h-6 rounded-lg w-full border-none transform transition-transform ease-out duration-500
+              name="email"
+              className="peer order-1 block h-6 rounded-lg w-full border-none transform transition-transform ease-out duration-500
              translate-y-0
               bg-white px-3 py-2 placeholder-stone-900 text-stone-900 text-base font-medium
            focus:outline-none focus:ring-0 focus:ring-offset-0
             disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed disabled:bg-gray-200"
               placeholder="Enter email address"
               required
-              value=""
             />
+            <label
+              htmlFor="email"
+              className="peer-focus:hidden text-neutral-400 text-sm pl-3 opacity-100">
+              Email address
+            </label>
           </div>
+        </div>
+
+        <div>
+          <button
+            className=" bg-[#ff4800] hover:bg-[#CD7355] rounded-full text-sm lg:text-base font-bold border border-brand-primary bg-brand-primary hover:bg-brand-dark leading-normal shadow-md active:bg-brand-secondary active:shadow-lg text-white px-20 py-4 transition ease-in-out duration-300 hover:cursor-pointer flex justify-center whitespace-nowrap mt-6 w-full"
+            type="submit">
+            Register
+          </button>
         </div>
         <div className="w-full my-6 h-6 relative">
           <div className="w-full h-px left-0 top-[11px] absolute bg-zinc-100"></div>
@@ -85,13 +95,6 @@ export default function page() {
               </svg>
             </span>
             Continue with Google
-          </button>
-        </div>
-        <div>
-          <button
-            className=" bg-[#ff4800] hover:bg-[#CD7355] rounded-full text-sm lg:text-base font-bold border border-brand-primary bg-brand-primary hover:bg-brand-dark leading-normal shadow-md active:bg-brand-secondary active:shadow-lg text-white px-20 py-4 transition ease-in-out duration-300 hover:cursor-pointer flex justify-center whitespace-nowrap mt-6 w-full"
-            type="submit">
-            Register
           </button>
         </div>
       </form>

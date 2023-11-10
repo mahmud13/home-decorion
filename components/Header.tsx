@@ -25,7 +25,7 @@ export default function Header() {
             </h2>
             <div className="mt-10 ">
               <Link
-                href={'/login'}
+                href={'/dream'}
                 className="bg-[#ff4800] text-white  hover:bg-[rgb(74,199,40)] hover:text-white rounded-full transition-all px-8 md:px-10 py-2 md:py-3 text-sm font-medium">
                 Get Started
               </Link>

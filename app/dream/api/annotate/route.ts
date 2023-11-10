@@ -1,9 +1,9 @@
-import vision from '@google-cloud/vision';
 import { Ratelimit } from '@upstash/ratelimit';
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
-import Replicate from 'replicate';
 import redis from '../../utils/redis';
+import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
+import Replicate from 'replicate';
+import vision from '@google-cloud/vision';
 
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
   const replicate = new Replicate({
     auth: process.env.REPLICATE_API_KEY,
   });
-  const imageBuffer = await request.arrayBuffer();
+  const { imageUrl } = await request.json();
 
   // POST request to Replicate to start the image restoration generation process
   const client = new vision.ImageAnnotatorClient({
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     },
   });
   if (client.objectLocalization) {
-    const [result] = await client.objectLocalization(Buffer.from(imageBuffer));
+    const [result] = await client.objectLocalization(imageUrl);
     const objects = result.localizedObjectAnnotations?.map<Item>((obj) => {
       const vertices = obj.boundingPoly?.normalizedVertices || [];
       return {
