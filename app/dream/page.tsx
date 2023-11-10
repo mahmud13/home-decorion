@@ -74,7 +74,7 @@ export default function DreamPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/generatev1', {
+      const res = await fetch('/dream/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function DreamPage() {
     // Create a FormData object and append the Blob
     const formData = new FormData();
     formData.append('image', fileBlob, 'image.jpg');
-    const res = await fetch('/annotate', {
+    const res = await fetch('/dream/api/annotate', {
       method: 'POST',
       body: formData,
     });
