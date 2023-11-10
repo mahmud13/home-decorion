@@ -3,7 +3,7 @@
 import { UrlBuilder } from '@bytescale/sdk';
 import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
-import { FormEvent, ReactNode, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { RingLoader } from 'react-spinners';
 import Footer from '@components/Footer';
 import Navbar from '@components/Navbar';
@@ -72,42 +72,36 @@ export default function DreamPage() {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
+    const res = await fetch("/dream/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl: fileUrl, theme: selectedTheme, room: selectedRoom }),
+    });
 
-    try {
-      const res = await fetch('/dream/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          imageUrl: fileUrl,
-          theme: selectedTheme.name,
-          room: selectedRoom.name,
-        }),
-      });
-      let restoredImage: string | null = null;
-      let blob = await res.blob();
-      restoredImage = URL.createObjectURL(blob);
-      console.log(restoredImage);
-      setRestoredImage(restoredImage);
-      annotatePhoto(blob);
-    } catch (error) {
-      setError('something went wrong');
+    let newPhoto = await res.json();
+    console.log(newPhoto);
+    if (res.status !== 200) {
+      setError(newPhoto);
+    } else {
+      setRestoredImage(newPhoto.restoredImageUrl);
+      annotatePhoto(newPhoto.restoredImageUrl);
     }
     setTimeout(() => {
       setLoading(false);
     }, 1300);
   }
 
-  async function annotatePhoto(fileBlob: any) {
+  async function annotatePhoto(restoredImageUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    // Create a FormData object and append the Blob
-    const formData = new FormData();
-    formData.append('image', fileBlob, 'image.jpg');
-    const res = await fetch('/dream/api/annotate', {
-      method: 'POST',
-      body: formData,
+    const res = await fetch("/dream/api/annotate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl: restoredImageUrl }),
     });
 
     let response = await res.json();
