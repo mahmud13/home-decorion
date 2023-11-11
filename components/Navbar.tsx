@@ -7,11 +7,11 @@ import { Fragment, useEffect, useState } from 'react';
 
 const navigation = [{ name: 'How it Works', href: '#', current: true }];
 
-function classNames(...classes:any) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar({ isLoggedIn }:{isLoggedIn:boolean}) {
+export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <Disclosure
       as="nav"
@@ -42,9 +42,9 @@ export default function Navbar({ isLoggedIn }:{isLoggedIn:boolean}) {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {!isLoggedIn ? (
                   <Link
-                    href={'/dream'}
+                    href={'/login'}
                     className="bg-[#ff4800] text-white  hover:bg-[#4ac728] hover:text-white rounded-full transition-all px-4 md:px-7 py-2 md:py-3 text-sm font-medium">
-                    Get Started
+                    Log In
                   </Link>
                 ) : (
                   <Menu

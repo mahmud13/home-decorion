@@ -9,19 +9,18 @@ export default function Header() {
       <div className="bg-[url('/header-bg.jpg')] md:h-screen bg-cover bg-no-repeat">
         <div className="h-full bg-gray-950/30 backdrop-brightness-50 text-white py-10 md:py-0">
           <div className="max-w-7xl h-full mx-auto px-2 sm:px-6 lg:px-8 flex flex-col justify-center items-center md:items-start">
-            <h1 className="max-w-4xl text-center md:text-start font-display text-4xl font-bold tracking-normal sm:text-7xl">
-              <span> Generating dream rooms</span>
+            <h1 className="max-w-4xl text-center md:text-start font-display leading-tight md:leading-snug font-bold tracking-normal text-4xl md:text-6xl">
+              <span>
+                One-Stop Solution for Design, Pricing, and Purchasing.{' '}
+              </span>
               <span className="relative whitespace-nowrap text-[#ff4800]">
                 <SquigglyLines />
-                <span className="relative">using AI</span>
+                <span className="relative">Transform Your Space</span>
               </span>{' '}
-              for everyone.
+              with Ease.
             </h1>
-            <h2 className="mt-6 md:mt-12 max-w-xl text-base md:text-xl text-center md:text-start  text-white leading-7">
-              <span>
-                Take a picture of your room and see how your room looks in
-                different themes. remodel your room today.
-              </span>
+            <h2 className="mt-6 md:mt-02 max-w-xl text-base md:text-xl text-center md:text-start  text-white leading-7">
+              <span>Instant Interior Design & Clear Cost Estimation</span>
             </h2>
             <div className="mt-10 ">
               <Link

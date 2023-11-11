@@ -17,10 +17,10 @@ export default function RootLayout({
             <div className="md:w-1/2 hidden md:block">
               <Image
                 alt=""
-                src="/generated-pic-2.jpg"
+                src="/signup-login-sidebar-image.jpg"
                 className="w-full h-full"
-                width={600}
-                height={600}
+                width={1000}
+                height={1000}
               />
             </div>
 
@@ -31,7 +31,7 @@ export default function RootLayout({
                   className="flex space-x-2 justify-center">
                   <Image
                     alt="header text"
-                    src="/bed.svg"
+                    src="/logo.png"
                     className="sm:w-10 sm:h-10 w-9 h-9"
                     width={24}
                     height={24}
@@ -40,13 +40,13 @@ export default function RootLayout({
                     DECORION
                   </h1>
                 </Link>
-                {pathName === '/auth/login' && (
+                {pathName === '/login' && (
                   <div className="mt-6 text-center text-base leading-6 tracking-tight text-gray-900">
                     <div className="font-bold text-3xl mb-4">Welcome Back</div>
                     Please enter your credentials to sign in to the account
                   </div>
                 )}
-                {pathName === '/auth/signup' && (
+                {pathName === '/signup' && (
                   <div className="mt-6 text-center text-base leading-6 tracking-tight text-gray-900">
                     <div className="font-bold text-3xl mb-4">
                       Create your account
@@ -57,16 +57,16 @@ export default function RootLayout({
 
                 <div className="mt-6 h-[42px] w-[260px] lg:w-[344px] lg:h-[52px] grid grid-cols-2 rounded-full bg-stone-200 p-[4px] mx-auto">
                   <Link
-                    href="/auth/login"
+                    href="login"
                     className={`w-full flex justify-center items-center text-base font-medium leading-tight rounded-[40px] transform transition ease-in-out duration-200 ${
-                      pathName === '/auth/login' && 'bg-cyan-950 text-white'
+                      pathName === '/login' && 'bg-cyan-950 text-white'
                     } `}>
                     Sign in
                   </Link>
                   <Link
-                    href="/auth/signup"
+                    href="signup"
                     className={`w-full flex justify-center items-center text-base font-medium leading-tight rounded-[40px] transform transition ease-in-out duration-200 cursor-pointer ${
-                      pathName === '/auth/signup' && 'bg-cyan-950 text-white'
+                      pathName === '/signup' && 'bg-cyan-950 text-white'
                     } `}>
                     Sign Up
                   </Link>
