@@ -3,7 +3,9 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import redis from "@utils/redis";
 import { roomType, themeType } from "@utils/dropdownTypes";
-
+export interface GeneratePostResponse {
+restoredImageUrl: string;
+}
 // Create a new ratelimiter, that allows 5 requests per 24 hours
 const ratelimit = redis
   ? new Ratelimit({
@@ -71,7 +73,7 @@ export async function POST(request: NextRequest) {
   if (!downloadId) {
     return NextResponse.json({ error: "No download Id" });
   }
-  return NextResponse.json({
+  return NextResponse.json<GeneratePostResponse>({
     restoredImageUrl: `http://california-a.tensordockmarketplace.com:20505/download/${downloadId}`,
   });
 }

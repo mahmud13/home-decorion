@@ -10,8 +10,9 @@ import Navbar from '@components/Navbar';
 import UploadPhoto from '@components/UploadPhoto';
 import { roomType, rooms, themeType, themes } from '@utils/dropdownTypes';
 import { Item } from './_interfaces/Item';
-import GeneratedPhoto from './_components/GeneratedPhoto';
+import AfterGeneration from './_components/AfterGeneration';
 import GeneratePhoto from './_components/GeneratePhoto/GeneratePhoto';
+import { GeneratePostResponse } from './api/generate/route';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -80,11 +81,11 @@ export default function DreamPage() {
       body: JSON.stringify({ imageUrl: fileUrl, theme: selectedTheme, room: selectedRoom }),
     });
 
-    let newPhoto = await res.json();
-    console.log(newPhoto);
     if (res.status !== 200) {
-      setError(newPhoto);
+      setError(await res.json());
     } else {
+      const newPhoto: GeneratePostResponse = await res.json();
+      console.log({photo: newPhoto.restoredImageUrl});
       setRestoredImage(newPhoto.restoredImageUrl);
       annotatePhoto(newPhoto.restoredImageUrl);
     }
@@ -108,7 +109,7 @@ export default function DreamPage() {
     if (res.status !== 200) {
       setError(response);
     } else {
-      console.log({ response });
+      console.log({ json: response });
       setAnnotatedJson(response);
     }
     setTimeout(() => {
@@ -185,7 +186,7 @@ export default function DreamPage() {
     );
   if (!loading && !error && originalPhoto && restoredImage)
     content = (
-      <GeneratedPhoto
+      <AfterGeneration
         originalPhoto={originalPhoto}
         restoredImage={restoredImage}
         annotatedJson={annotatedJson}
