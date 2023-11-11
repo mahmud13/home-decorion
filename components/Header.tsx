@@ -9,7 +9,7 @@ export default function Header() {
       <div className="bg-[url('/header-bg.jpg')] md:h-screen bg-cover bg-no-repeat">
         <div className="h-full bg-gray-950/30 backdrop-brightness-50 text-white py-10 md:py-0">
           <div className="max-w-7xl h-full mx-auto px-2 sm:px-6 lg:px-8 flex flex-col justify-center items-center md:items-start">
-            <h1 className="max-w-4xl text-center md:text-start font-display leading-tight md:leading-snug font-bold tracking-normal text-4xl md:text-6xl">
+            <h1 className="max-w-4xl text-center md:text-start font-display leading-tight md:leading-snug lg:leading-normal font-bold tracking-normal text-2xl md:text-4xl lg:text-6xl">
               <span>
                 One-Stop Solution for Design, Pricing, and Purchasing.{' '}
               </span>
@@ -19,13 +19,13 @@ export default function Header() {
               </span>{' '}
               with Ease.
             </h1>
-            <h2 className="mt-6 md:mt-02 max-w-xl text-base md:text-xl text-center md:text-start  text-white leading-7">
+            <h2 className="mt-3 md:mt-5 max-w-xl text-base md:text-lg text-center md:text-start  text-white leading-7">
               <span>Instant Interior Design & Clear Cost Estimation</span>
             </h2>
-            <div className="mt-10 ">
+            <div className="mt-7 md:mt-10 ">
               <Link
                 href={'/dream'}
-                className="bg-[#ff4800] text-white  hover:bg-[rgb(74,199,40)] hover:text-white rounded-full transition-all px-8 md:px-10 py-2 md:py-3 text-sm font-medium">
+                className="bg-[#ff4800] text-white  hover:bg-[rgb(74,199,40)] hover:text-white rounded-full transition-all px-8 md:px-10 py-3 md:py-3 text-base font-medium">
                 Get Started
               </Link>
             </div>
