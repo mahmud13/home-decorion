@@ -39,7 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       className="h-ful">
-      <body className="bg-[#17181C] text-white h-full">
+      <body className="text-white h-full">
         {children}
         <Analytics />
       </body>

@@ -3,16 +3,16 @@
 import { UrlBuilder } from '@bytescale/sdk';
 import { UploadWidgetConfig } from '@bytescale/upload-widget';
 import { UploadDropzone } from '@bytescale/upload-widget-react';
-import { FormEvent, useState } from 'react';
-import { RingLoader } from 'react-spinners';
 import Footer from '@components/Footer';
 import Navbar from '@components/Navbar';
 import UploadPhoto from '@components/UploadPhoto';
 import { roomType, rooms, themeType, themes } from '@utils/dropdownTypes';
-import { Item } from './_interfaces/Item';
 import AfterGeneration from './_components/AfterGeneration';
-import GeneratePhoto from './_components/GeneratePhoto/GeneratePhoto';
+import GeneratePhoto from './_components/GeneratePhoto';
 import { GeneratePostResponse } from './api/generate/route';
+import { FormEvent, useState } from 'react';
+import { HashLoader } from 'react-spinners';
+import { Item } from './_interfaces/Item';
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -73,12 +73,16 @@ export default function DreamPage() {
   async function generatePhoto(fileUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch("/dream/api/generate", {
-      method: "POST",
+    const res = await fetch('/dream/api/generate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ imageUrl: fileUrl, theme: selectedTheme, room: selectedRoom }),
+      body: JSON.stringify({
+        imageUrl: fileUrl,
+        theme: selectedTheme,
+        room: selectedRoom,
+      }),
     });
 
     if (res.status !== 200) {
@@ -97,10 +101,10 @@ export default function DreamPage() {
   async function annotatePhoto(restoredImageUrl: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     setLoading(true);
-    const res = await fetch("/dream/api/annotate", {
-      method: "POST",
+    const res = await fetch('/dream/api/annotate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ imageUrl: restoredImageUrl }),
     });
@@ -109,7 +113,6 @@ export default function DreamPage() {
     if (res.status !== 200) {
       setError(response);
     } else {
-      console.log({ json: response });
       setAnnotatedJson(response);
     }
     setTimeout(() => {
@@ -132,13 +135,13 @@ export default function DreamPage() {
   let content = null;
   if (loading)
     content = (
-      <div className="flex items-center justify-center w-full h-screen z-50">
-        <div className="flex justify-center items-center space-x-1 text-sm text-gray-700">
-          <RingLoader
-            color="hsla(168, 67%, 53%, 1)"
+      <div className="flex items-center justify-center w-full h-screen z-50 ">
+        <div className="flex justify-center flex-col items-center gap-6 space-x-1 text-sm text-[#e73636]">
+          <HashLoader
+            color="#d63636"
             size={200}
           />
-          <div>Loading ...</div>
+          <div>Generating ...</div>
         </div>
       </div>
     );
@@ -195,7 +198,10 @@ export default function DreamPage() {
   return (
     <div className="flex w-full mx-auto flex-col items-center justify-center min-h-screen">
       {!loading && <Navbar isLoggedIn={true} />}
-      <main className="bg-[#FCF3EC] w-full text-black text-center">
+      <main
+        className={`${
+          loading ? 'bg-[#333333]' : 'bg-[#FCF3EC]'
+        }  w-full text-black text-center`}>
         {content}
       </main>
       {!loading && <Footer />}

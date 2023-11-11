@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Item } from "../../_interfaces/Item";
 import MyTabs from "./MyTabs";
 import ProductList from "./ProductList";
