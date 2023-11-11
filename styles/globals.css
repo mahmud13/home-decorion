@@ -7,6 +7,9 @@
 :before {
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 @media (min-width: 500px) {
   .background-gradient::before {
     background: radial-gradient(circle at center, green 0, green, green 100%);

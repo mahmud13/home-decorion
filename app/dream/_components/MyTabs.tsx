@@ -7,15 +7,16 @@ import Overlay from './Overlay';
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
+interface Props {
+  beforeImg: string;
+  restoredImage: string;
+  annotatedJson: Item[];
+}
 export default function MyTabs({
   beforeImg,
   restoredImage,
   annotatedJson,
-}: {
-  beforeImg: string;
-  restoredImage: string;
-  annotatedJson: Item[];
-}) {
+}: Props): JSX.Element {
   const [restoredImgElement, setRestoredImgElement] =
     useState<HTMLImageElement | null>(null);
   const [overlays, setOverlays] = useState<ReactNode | null>(null);
@@ -26,7 +27,7 @@ export default function MyTabs({
   useEffect(() => {
     if (annotatedJson && restoredImage && restoredImgElement) {
       setOverlays(
-        annotatedJson.map((item) => {
+        annotatedJson.map((item, idx) => {
           const imageWidth = restoredImgElement.width;
           const imageHeight = restoredImgElement.height;
           const { vertices } = item;
@@ -48,6 +49,7 @@ export default function MyTabs({
           const rectHeight = maxY - minY;
           return (
             <Overlay
+              key={idx}
               rectX={rectX}
               rectY={rectY}
               rectWidth={rectWidth}
@@ -58,11 +60,8 @@ export default function MyTabs({
         })
       );
     }
-    console.log(annotatedJson);
   }, [restoredImage, restoredImgElement, annotatedJson]);
-  useEffect(() => {
-    console.log(overlays);
-  }, [overlays]);
+
   return (
     <div className="w-full px-2   sm:px-0">
       <Tab.Group defaultIndex={1}>

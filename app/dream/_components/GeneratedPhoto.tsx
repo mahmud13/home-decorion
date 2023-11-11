@@ -1,5 +1,5 @@
-import Image from "next/image";
-import MyTabs from "./MyTabs";
+import Image from 'next/image';
+import MyTabs from './MyTabs';
 
 export default function GeneratedPhoto({
   originalPhoto,
@@ -21,7 +21,9 @@ export default function GeneratedPhoto({
             {Array(12)
               .fill(0)
               .map((_, i) => (
-                <div className="cursor-pointer" key={i}>
+                <div
+                  className="cursor-pointer"
+                  key={i}>
                   <Image
                     alt=""
                     src="/dummy-product.png"

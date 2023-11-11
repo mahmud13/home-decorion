@@ -4,9 +4,9 @@ interface Props {
   description: string;
   imgUrl: string;
 }
-const  Card = ({ title, description, imgUrl }: Props): JSX.Element => {
+const Card = ({ title, description, imgUrl }: Props): JSX.Element => {
   return (
-    <div className="max-w-sm bg-white rounded shadow p-4">
+    <div className="max-w-sm bg-[#F2F6F9] rounded shadow p-4">
       <div>
         <Image
           alt="header text"
@@ -28,5 +28,5 @@ const  Card = ({ title, description, imgUrl }: Props): JSX.Element => {
       </div>
     </div>
   );
-}
+};
 export default Card;
