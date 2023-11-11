@@ -1,7 +1,8 @@
-import { Tab } from "@headlessui/react";
-import { ReactNode, useEffect, useState } from "react";
-import { Item } from "../_interfaces/Item";
+import { Tab } from '@headlessui/react';
 import Image from 'next/image';
+import { ReactNode, useEffect, useState } from 'react';
+import { Item } from '../_interfaces/Item';
+import Overlay from './Overlay';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -46,26 +47,17 @@ export default function MyTabs({
           const rectWidth = maxX - minX;
           const rectHeight = maxY - minY;
           return (
-            <div
-              style={{
-                left: rectX + 'px',
-                top: rectY + 'px',
-                width: rectWidth + 'px',
-                height: rectHeight + 'px',
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  'http://www.google.com/search?q=' + item.name,
-                  '_blank'
-                );
-              }}
-              className="annotation-rect"></div>
+            <Overlay
+              rectX={rectX}
+              rectY={rectY}
+              rectWidth={rectWidth}
+              rectHeight={rectHeight}
+              name={item.name}
+            />
           );
         })
       );
     }
-    console.log('result');
     console.log(annotatedJson);
   }, [restoredImage, restoredImgElement, annotatedJson]);
   useEffect(() => {
@@ -119,7 +111,7 @@ export default function MyTabs({
               'rounded-xl bg-white p-3',
               'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
             )}>
-            <div className="image-container">
+            <div className="relative">
               <Image
                 alt="generated-image"
                 src={restoredImage}
