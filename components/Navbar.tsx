@@ -32,8 +32,8 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
   useEffect(() => {
     window.addEventListener('scroll', setFixed);
   }, []);
-  let navBarStyle = '';
 
+  let navBarStyle = '';
   if (pathName === '/') {
     navBarStyle = `fixed top-0 z-50 bg-gray-700 ${
       fix ? 'md:bg-white shadow-lg md:text-black' : 'md:bg-transparent'
