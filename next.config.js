@@ -2,6 +2,6 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["upcdn.io", "replicate.delivery", "pbxt.replicate.delivery", "california-a.tensordockmarketplace.com"],
+    domains: ["upcdn.io", "replicate.delivery", "pbxt.replicate.delivery", "california-a.tensordockmarketplace.com", "*.google.com"],
   },
 };
