@@ -89,7 +89,7 @@ export default function DreamPage() {
       setError(await res.json());
     } else {
       const newPhoto: GeneratePostResponse = await res.json();
-      console.log({photo: newPhoto.restoredImageUrl});
+      console.log({ photo: newPhoto.restoredImageUrl });
       setRestoredImage(newPhoto.restoredImageUrl);
       annotatePhoto(newPhoto.restoredImageUrl);
     }

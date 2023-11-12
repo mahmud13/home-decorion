@@ -32,15 +32,25 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
   useEffect(() => {
     window.addEventListener('scroll', setFixed);
   }, []);
+  let navBarStyle = '';
+
+  if (pathName === '/') {
+    navBarStyle = `fixed top-0 z-50 bg-gray-700 ${
+      fix ? 'md:bg-white shadow-lg md:text-black' : 'md:bg-transparent'
+    }`;
+  }
+  if (pathName !== '/') {
+    navBarStyle = `bg-gray-700 ${
+      fix &&
+      'fixed top-0 z-50 md:bg-white shadow-lg md:text-black transition-all duration-500 ease-in'
+    }`;
+  }
+
   return (
     <>
       <Disclosure
         as="nav"
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ease-in-out ${
-          fix
-            ? 'md:bg-white shadow-lg md:text-black bg-gray-700'
-            : 'bg-gray-700 md:bg-transparent'
-        }`}>
+        className={`w-full transition-all duration-500 ease-in-out ${navBarStyle}`}>
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
