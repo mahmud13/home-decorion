@@ -17,6 +17,7 @@ model FurnitureItem {
   price     Decimal
   type      String
   photo     String
+  link      String
   isTrained Boolean @default(false)
   @@map(name: "furniture_items")
 }
