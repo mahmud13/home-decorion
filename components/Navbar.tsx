@@ -38,7 +38,7 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
         as="nav"
         className={`fixed top-0 z-50 w-full transition-all duration-500 ease-in-out ${
           fix
-            ? 'bg-white shadow-lg text-black'
+            ? 'md:bg-white shadow-lg md:text-black bg-gray-700'
             : 'bg-gray-700 md:bg-transparent'
         }`}>
         {({ open }) => (
@@ -75,7 +75,7 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
                         width={24}
                         height={24}
                       />
-                      <span className='className="sm:text-3xl text-xl font-bold ml-2 tracking-tight"'>
+                      <span className='className="sm:text-3xl text-lg font-bold ml-1 sm:ml-2 tracking-tight"'>
                         DECORION
                       </span>
                     </Link>
@@ -175,7 +175,7 @@ export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
                         fix
                           ? 'bg-[#ff4800] text-white'
                           : 'bg-white text-[#ff4800]'
-                      }    hover:bg-[#4ac728] hover:text-white rounded-full transition-all px-4 md:px-7 py-2 text-base font-medium`}>
+                      }    hover:bg-[#4ac728] hover:text-white rounded-full transition-all px-4 md:px-7 py-2 text-sm md:text-base font-medium`}>
                       Log In
                     </Link>
                   )}
