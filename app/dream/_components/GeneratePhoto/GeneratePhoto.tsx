@@ -42,7 +42,7 @@ const GeneratePhoto = ({
               <RadioGroup
                 value={selectedTheme}
                 onChange={setSelectedTheme}
-                className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[50vh] overflow-y-auto">
                 <RadioGroup.Label className="sr-only">
                   Server size
                 </RadioGroup.Label>
@@ -53,17 +53,19 @@ const GeneratePhoto = ({
                     className="cursor-pointer">
                     {({ checked }) => (
                       <>
-                        <Image
-                          alt={theme.name}
-                          src={theme.img}
-                          className={`${
-                            checked
-                              ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-[#ff4800] '
-                              : ''
-                          } h-auto max-w-full rounded-lg p-1`}
-                          width={500}
-                          height={500}
-                        />
+                        <div className="h-[120px] md:h-[150px] lg:h-[92px] max-w-full">
+                          <Image
+                            alt={theme.name}
+                            src={theme.img}
+                            className={`${
+                              checked
+                                ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-[#ff4800] '
+                                : ''
+                            } h-full max-w-full rounded-lg p-1`}
+                            width={500}
+                            height={500}
+                          />
+                        </div>
                         <p className="mt-1 text-sm">{theme.name}</p>
                       </>
                     )}
@@ -77,7 +79,7 @@ const GeneratePhoto = ({
               <RadioGroup
                 value={selectedRoom}
                 onChange={setSelectedRoom}
-                className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[50vh] overflow-y-auto">
                 <RadioGroup.Label className="sr-only">
                   Server size
                 </RadioGroup.Label>
@@ -88,17 +90,19 @@ const GeneratePhoto = ({
                     className="cursor-pointer">
                     {({ checked }) => (
                       <>
-                        <Image
-                          alt={room.name}
-                          src={room.img}
-                          className={`${
-                            checked
-                              ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-[#ff4800] '
-                              : ''
-                          } h-auto max-w-full rounded-lg p-1`}
-                          width={500}
-                          height={500}
-                        />
+                        <div className="h-[120px] md:h-[150px] lg:h-[92px] max-w-full">
+                          <Image
+                            alt={room.name}
+                            src={room.img}
+                            className={`${
+                              checked
+                                ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-[#ff4800] '
+                                : ''
+                            } h-full max-w-full rounded-lg p-1`}
+                            width={500}
+                            height={500}
+                          />
+                        </div>
                         <p className="mt-1 text-sm">{room.name}</p>
                       </>
                     )}

@@ -10,7 +10,7 @@ export default function Header() {
         <div className="text-white py-10 md:py-0 h-full w-full ">
           <div className="max-w-7xl h-full mx-auto px-2 sm:px-6 lg:px-8 flex flex-col justify-center items-center md:items-start">
             <h1 className="max-w-4xl text-center md:text-start font-display leading-tight md:leading-snug lg:leading-normal font-bold tracking-tight text-2xl md:text-4xl lg:text-6xl capitalize">
-              <span>AI-powered Interior design</span>
+              <span>AI-powered Interior </span>
               <span className="relative whitespace-nowrap text-[#ff4800]">
                 <SquigglyLines />
                 <span className="relative">design</span>
