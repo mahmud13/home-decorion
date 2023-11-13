@@ -1,4 +1,3 @@
-import HowItWorks from '@components/HowItWorks';
 import StartFreeTrial from '@components/StartFreeTrial';
 import WhyDecorion from '@components/WhyDecorion';
 import Footer from '../components/Footer';
@@ -9,7 +8,6 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <WhyDecorion />
         <StartFreeTrial />
       </main>
       <Footer />
