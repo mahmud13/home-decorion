@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: `a ${theme.name.toLowerCase()}, ${room.name.toLowerCase()}, a variety of home decors, designer wall, realistic, 4k, interior, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic`,
+        prompt: `a ${theme.name.toLowerCase()}, ${room.name.toLowerCase()}, a variety of home decors,  realistic, 4k, interior, extremely detailed, cinematic photo, ultra-detailed, ultra-realistic`,
         negative_prompt:
           "(normal quality), (low quality), (worst quality), paintings, sketches,extra digit,fewer digits,cropped,worst quality",
         original_image: imageUrl,
