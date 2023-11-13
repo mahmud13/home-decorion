@@ -57,7 +57,7 @@ export default ({ item }: { item?: Item }) => {
     );
   if (!loading && products)
     content = (
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 2xl:gap-7">
         {products.map((product) => (
           <ProductCard
             key={product.id}
@@ -69,7 +69,7 @@ export default ({ item }: { item?: Item }) => {
   if (!loading && products?.length === 0)
     content = <div className="mt-20">No product found</div>;
   return (
-    <div className="w-full">
+    <div className="w-full 2xl:px-20">
       <div className="flex justify-end pe-4 mb-4">
         <div className="cursor-pointer flex items-center">
           <AdjustmentsHorizontalIcon className="h-6 w-6 me-2 " />

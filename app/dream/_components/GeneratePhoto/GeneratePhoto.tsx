@@ -112,13 +112,13 @@ const GeneratePhoto = ({
               />
             </div>
             <div className="col-span-1 lg:col-span-2 w-full h-full flex flex-col items-center justify-start bg-white rounded-xl border border-gray-200 p-4 lg:p-7">
-              <div className="w-full relative">
+              <div className="w-full relative h-[500px] 2xl:h-[900px]">
                 <Image
                   alt="original photo"
                   src={originalPhoto}
                   className="w-full h-auto"
-                  width={500}
-                  height={500}
+                  width={1000}
+                  height={1000}
                 />
                 <div className="absolute bottom-3 mx-auto left-0 right-0 w-fit h-8 px-5 py-[3px] bg-slate-950 bg-opacity-40 rounded-[40px] backdrop-blur-[3px] justify-center items-center  inline-flex">
                   <div className="text-center text-white text-base whitespace-nowrap font-medium leading-relaxed">

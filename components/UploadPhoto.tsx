@@ -18,8 +18,8 @@ export default function UploadPhoto({
               alt="Upload icon"
               src="/upload.png"
               className=""
-              width={100}
-              height={100}
+              width={500}
+              height={500}
             />
           </div>
         </div>
@@ -27,8 +27,8 @@ export default function UploadPhoto({
           Upload a photo of your space
         </h3>
         <p className="text-[6C7871] text-base leading-7">
-          Drag and drop or choose file <br /> PNG, JPEG & JPG files are allowd.
-          No larger than 25MB
+          Choose a file <br /> PNG, JPEG & JPG files are allowd. No larger than
+          5 MB
         </p>
         <ResizablePanel>
           <AnimatePresence mode="wait">
