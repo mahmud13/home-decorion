@@ -17,7 +17,7 @@ export default function AfterGeneration({
   return (
     <div className="mx-auto w-full px-4 flex justify-center py-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4">
-        <div className="order-last mx-auto lg:order-first px-2 py-5 col-span-1 w-full h-screen flex flex-col items-start bg-white rounded-xl border border-gray-200 p-2 lg:p-2 lg:py-8 overflow-y-auto no-scrollbar">
+        <div className="order-last mx-auto lg:order-first px-2 py-5 col-span-1 w-full md:h-screen flex flex-col items-start bg-white rounded-xl border border-gray-200 p-2 lg:p-2 lg:py-8 overflow-y-auto no-scrollbar">
           <div className="text-black text-lg w-full mb-4 text-center font-medium leading-7 pb-2.5">
             Furnitures Detection
           </div>

@@ -35,7 +35,7 @@ export default function Footer() {
                     save time and money!
                   </p>
                   {/* Social Icons  */}
-                  <div className="flex mt-6 space-x-3 justify-start">
+                  <div className="flex mt-6 md:space-x-2 lg:space-x-3 justify-start">
                     <Link
                       href="#"
                       className="hover:text-white bg-[#212529] p-2 rounded-full hover:bg-[#ff4800]">
@@ -149,8 +149,8 @@ export default function Footer() {
         </div>
         <div className="w-full bg-[#000]  text-white">
           <div className=" mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-5">
-            <div className="sm:flex sm:items-center sm:justify-center">
-              <span className="text-sm  sm:text-center ">
+            <div className="flex items-center justify-center">
+              <span className="text-sm  text-center ">
                 © {year + ' '}
                 <Link
                   href="/"
