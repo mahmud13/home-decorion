@@ -8,10 +8,10 @@ export default function Footer() {
   return (
     <>
       <footer className="w-full">
-        <div className="w-full bg-[url('/foter-bg.jpg')] bg-cover bg-no-repeat  min-h-[450px] relative">
-          <div className="lg:py-16 h-full w-full absolute top-0 left-0 text-white bg-[#15171aa8]">
+        <div className="w-full bg-[url('/foter-bg.jpg')] bg-cover bg-no-repeat  min-h-[500px] sm:min-h-[350px] max-h-full relative">
+          <div className="lg:pt-12 h-full w-full absolute top-0 left-0 text-white bg-[#15171aa8]">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-              <div className="grid grid-cols-2 gap-8 md:grid-cols-3 justify-items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 md:grid-cols-3">
                 <div>
                   {/* Logo  */}
                   <Link
@@ -119,7 +119,7 @@ export default function Footer() {
                     </Link>
                   </div>
                 </div>
-                <div>
+                <div className="w-full">
                   <h2 className="mb-4 pb-1 text-lg font-bold  uppercase xt-white relative before:content-[''] before:h-[2px] before:w-10 before:bg-[#ff4800] before:absolute before:left-0 before:bottom-0">
                     Services
                   </h2>
@@ -133,7 +133,7 @@ export default function Footer() {
                     </li>
                   </ul>
                 </div>
-                <div>
+                <div className="w-full">
                   <h2 className="mb-4 pb-1 text-lg font-bold  uppercase xt-white relative before:content-[''] before:h-[2px] before:w-10 before:bg-[#ff4800] before:absolute before:left-0 before:bottom-0">
                     Contacts
                   </h2>
