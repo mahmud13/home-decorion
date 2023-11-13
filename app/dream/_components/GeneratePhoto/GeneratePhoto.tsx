@@ -121,9 +121,8 @@ const GeneratePhoto = ({
                   <Image
                     alt="original photo"
                     src={originalPhoto}
-                    className="w-full h-full"
-                    width={2000}
-                    height={2000}
+                    fill={true}
+                    quality={100}
                   />
                   <div className="absolute top-[90%] mx-auto left-0 right-0 w-fit h-8 px-5 py-[3px] bg-slate-950 bg-opacity-40 rounded-[40px] backdrop-blur-[3px] justify-center items-center  inline-flex">
                     <div className="text-center text-white text-base whitespace-nowrap font-medium leading-relaxed">

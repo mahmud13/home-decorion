@@ -53,17 +53,16 @@ export default function MyTabs({
             After
           </Tab>
         </Tab.List>
-        <Tab.Panels className="mt-2">
+        <Tab.Panels className="mt-1">
           <Tab.Panel
             className={classNames(
               'rounded-xl bg-white p-3',
               'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
             )}>
-            <div className="relative aspect-w-16 aspect-h-10">
+            <div className="relative aspect-w-16 aspect-h-9">
               <Image
                 alt="original-image"
                 src={beforeImg}
-                className="w-full h-full"
                 fill={true}
                 quality={100}
               />
@@ -74,7 +73,7 @@ export default function MyTabs({
               'rounded-xl bg-white p-3',
               'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 '
             )}>
-            <div className="relative aspect-w-16 aspect-h-10">
+            <div className="relative aspect-w-16 aspect-h-9">
               <Image
                 alt="generated-image"
                 src={restoredImage}
