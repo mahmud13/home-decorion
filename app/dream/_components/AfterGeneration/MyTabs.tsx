@@ -1,10 +1,10 @@
-import { Tab } from "@headlessui/react";
-import Image from "next/image";
-import { useState } from "react";
-import { Item } from "../../_interfaces/Item";
-import Overlay from "./Overlay";
+import { Tab } from '@headlessui/react';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Item } from '../../_interfaces/Item';
+import Overlay from './Overlay';
 
-const classNames = (...classes: string[]) => classes.filter(Boolean).join(" ");
+const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
 interface Props {
   beforeImg: string;
   restoredImage: string;
@@ -31,56 +31,54 @@ export default function MyTabs({
           <Tab
             className={({ selected }) =>
               classNames(
-                "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
-                "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
+                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                 selected
-                  ? "bg-white shadow"
-                  : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                  ? 'bg-white shadow'
+                  : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
               )
-            }
-          >
+            }>
             Before
           </Tab>
           <Tab
             className={({ selected }) =>
               classNames(
-                "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
-                "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
+                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                 selected
-                  ? "bg-white shadow"
-                  : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                  ? 'bg-white shadow'
+                  : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
               )
-            }
-          >
+            }>
             After
           </Tab>
         </Tab.List>
         <Tab.Panels className="mt-2">
           <Tab.Panel
             className={classNames(
-              "rounded-xl bg-white p-3",
-              "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
-            )}
-          >
-            <Image
-              alt="original-image"
-              src={beforeImg}
-              className="w-full mx-auto max-h-[460px]"
-              width={500}
-              height={500}
-            />
+              'rounded-xl bg-white p-3',
+              'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+            )}>
+            <div className="w-full h-full">
+              <Image
+                alt="original-image"
+                src={beforeImg}
+                className="w-full h-full"
+                width={500}
+                height={500}
+              />
+            </div>
           </Tab.Panel>
           <Tab.Panel
             className={classNames(
-              "rounded-xl bg-white p-3",
-              "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
-            )}
-          >
-            <div className="relative">
+              'rounded-xl bg-white p-3',
+              'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+            )}>
+            <div className="relative w-full max-h-[1400px]">
               <Image
                 alt="generated-image"
                 src={restoredImage}
-                className="w-full mx-auto max-h-[460px]"
+                className="w-full h-full"
                 width={500}
                 height={500}
                 onLoadingComplete={(img) => onRestoredImageLoaded(img)}
@@ -92,8 +90,7 @@ export default function MyTabs({
                     item={item}
                     parentImg={restoredImgElement}
                     onItemClicked={() => onItemClicked(item)}
-                    key={item.name + item.score}
-                  ></Overlay>
+                    key={item.name + item.score}></Overlay>
                 ))}
             </div>
           </Tab.Panel>
