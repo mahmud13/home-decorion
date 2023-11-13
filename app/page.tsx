@@ -9,7 +9,6 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <HowItWorks />
         <WhyDecorion />
         <StartFreeTrial />
       </main>

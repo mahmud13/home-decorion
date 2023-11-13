@@ -5,7 +5,7 @@ export default function StartFreeTrial() {
   return (
     <section className="bg-[#000] text-white">
       <div className="w-full mx-auto flex flex-col lg:flex-row lg:before:content-[''] lg:before:w-4/6 lg:before:h-full lg:before:bg-[url('/signup-free-bg.png')] lg:before:bg-cover lg:before:bg-no-repeat lg:before:absolute lg:before:top-0 lg:before:right-0 lg:relative lg:before:z-[1] lg:z-[1]">
-        <div className="w-full lg:w-1/2 h-[350px] md:h-[450px] lg:h-[700px]">
+        <div className="w-full lg:w-1/2 h-[350px] md:h-[450px] 2xl:h-[700px]">
           <Image
             alt="man"
             src="/man-with-laptop.jpg"
