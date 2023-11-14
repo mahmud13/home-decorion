@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
 
-const navigation = [
-  { name: 'Home', href: '/' },
+const navigation: {name: string; href: string}[] = [
+  // { name: 'Home', href: '/' },
   // { name: "How It's Works", href: '/#how-its-work' },
   // { name: 'Gallery', href: '/#gallery' },
   // { name: 'Price', href: '/#price' },
