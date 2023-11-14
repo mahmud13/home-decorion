@@ -8,10 +8,10 @@ import { Fragment, useEffect, useState } from 'react';
 
 const navigation = [
   { name: 'Home', href: '/' },
-  { name: "How It's Works", href: '/#how-its-work' },
-  { name: 'Gallery', href: '/#gallery' },
-  { name: 'Price', href: '/#price' },
-  { name: 'Contact', href: '/#contact' },
+  // { name: "How It's Works", href: '/#how-its-work' },
+  // { name: 'Gallery', href: '/#gallery' },
+  // { name: 'Price', href: '/#price' },
+  // { name: 'Contact', href: '/#contact' },
 ];
 
 function classNames(...classes: any) {

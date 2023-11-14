@@ -8,7 +8,7 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <StartFreeTrial />
+        {/* <StartFreeTrial /> */}
       </main>
       <Footer />
     </>
