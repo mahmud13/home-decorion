@@ -23,7 +23,7 @@ export default function AfterGeneration({
           </div>
           <ProductList item={selectedItem} />
         </div>
-        <div className="order-first lg:order-last col-span-1 lg:col-span-2 2xl:col-span-6 w-full h-full flex  flex-col items-center justify-start bg-white rounded-xl border border-gray-200 p-4 lg:p-7 2xl:px-20 lg:h-screen lg:overflow-y-auto lg:no-scrollbar">
+        <div className="order-first lg:order-last col-span-1 lg:col-span-2 2xl:col-span-6 w-full h-full flex  flex-col items-center justify-start bg-white rounded-xl border border-gray-200 p-4 lg:p-7 lg:pt-4 2xl:px-20 lg:h-screen lg:overflow-y-auto lg:no-scrollbar">
           <MyTabs
             beforeImg={originalPhoto}
             restoredImage={restoredImage}

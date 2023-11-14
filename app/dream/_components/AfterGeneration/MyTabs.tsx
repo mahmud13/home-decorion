@@ -53,36 +53,32 @@ export default function MyTabs({
             After
           </Tab>
         </Tab.List>
-        <Tab.Panels className="mt-2">
+        <Tab.Panels className="mt-1">
           <Tab.Panel
             className={classNames(
               'rounded-xl bg-white p-3',
               'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
             )}>
-            <div className="w-full h-full md:h-[500px] 2xl:h-[900px]">
-              <div className="w-full h-full">
-                <Image
-                  alt="original-image"
-                  src={beforeImg}
-                  className="w-full h-full"
-                  width={2000}
-                  height={2000}
-                />
-              </div>
+            <div className="relative aspect-w-16 aspect-h-9">
+              <Image
+                alt="original-image"
+                src={beforeImg}
+                fill={true}
+                quality={100}
+              />
             </div>
           </Tab.Panel>
           <Tab.Panel
             className={classNames(
               'rounded-xl bg-white p-3',
-              'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+              'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 '
             )}>
-            <div className="relative w-full h-full md:h-[500px] 2xl:h-[900px]">
+            <div className="relative aspect-w-16 aspect-h-9">
               <Image
                 alt="generated-image"
                 src={restoredImage}
-                className="w-full h-full"
-                width={2000}
-                height={2000}
+                fill={true}
+                quality={100}
                 onLoadingComplete={(img) => onRestoredImageLoaded(img)}
               />
               {annotatedJson &&
